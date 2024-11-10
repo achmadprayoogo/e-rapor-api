@@ -1,0 +1,60 @@
+<!-- main container -->
+<div
+  class="container-fluid vh-100 d-flex flex-column justify-content-center align-items-center p-5"
+  style="
+    background-image: radial-gradient(
+      circle at 50% -20.71%,
+      #ffffcf 0,
+      #ffffca 8.33%,
+      #f8ffc5 16.67%,
+      #eafec0 25%,
+      #dafabc 33.33%,
+      #c9f6b8 41.67%,
+      #b5f2b5 50%,
+      #a0edb4 58.33%,
+      #8ae9b5 66.67%,
+      #71e5b8 75%,
+      #56e2bd 83.33%,
+      #2fdec3 91.67%,
+      #00dbcb 100%
+    );
+  "
+>
+  <%- include('../../component/header-auth-user.html') %>
+  <!-- form Box -->
+  <div
+    class="form-box bg-white d-flex flex-column justify-content-center align-items-center border border-white rounded bg-opacity-10 mt-4"
+    data-aos="zoom-out"
+  >
+    <!-- form-container -->
+    <div class="form-container">
+      <form action="">
+        <label class="label-input" for="nisinput">*masukkan NIS</label>
+        <input
+          id="nisinput"
+          class="form-control w-100 p-3 mb-2 rounded-pill"
+          type="number"
+          placeholder="Nomor Induk Santri"
+          aria-label="default inpt example"
+        />
+        <label class="label-input" for="nisinput"
+          >*masukkan tanggal lahir</label
+        >
+        <input
+          class="form-control w-100 p-3 mb-2 rounded-pill"
+          type="date"
+          placeholder="Tanggal Lahir"
+          aria-label="default input example"
+        />
+        <button
+          type="button"
+          class="btn custom-background w-100 p-0 rounded-pill mt-4 animate__pulse"
+          style="height: 30px; font-family: Roboto Mono, monospace"
+        >
+          Cek Rapor
+        </button>
+      </form>
+    </div>
+  </div>
+  <%- include('../../component/footer-auth-user.html') %>
+</div>

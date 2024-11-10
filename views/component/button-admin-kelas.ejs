@@ -1,0 +1,16 @@
+<div class="dropdown me-2">
+  <button
+    class="btn btn-success dropdown-toggle d-flex align-items-center justify-content-center"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+    style="height: 35px"
+  >
+    Kelas
+  </button>
+  <ul class="dropdown-menu">
+    <% for( let i = 0; i < className.length; i++ ) { %>
+    <li><a class="dropdown-item" href="#"><%= className[i] %></a></li>
+    <% } %>
+  </ul>
+</div>

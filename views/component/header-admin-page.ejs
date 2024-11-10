@@ -1,0 +1,54 @@
+<div
+  class="d-flex flex-row w-100 border border-1 text-light baground-basic"
+  style="height: 125.59px; z-index: 3"
+>
+  <!-- logo -->
+  <div class="p-0 text-center d-flex align-items-center justify-content-center">
+    <img
+      src="/src/logo madin.png"
+      class="ms-2"
+      alt="..."
+      width="100"
+      height="100"
+    />
+  </div>
+  <!-- title -->
+  <div
+    class="title-box p-2 flex-grow-1 d-flex flex-column justify-content-center"
+  >
+    <h1 class="display-5 m-0 fw-bold text-center text-sm-start">
+      ADMIN E-RAPOR <span style="font-size: 25px">/ <%= pagePath %></span>
+    </h1>
+    <p class="m-0 fw-semibold text-center text-sm-start">
+      Madrasah Diniyah An-Nur II Al-Murtadlo
+    </p>
+    <p class="m-0 text-center text-sm-start d-none d-sm-inline">
+      Jl. Bululawang. No. 01
+      <span class="">Kec. Bululawang</span> Kab. Malang
+    </p>
+  </div>
+  <!-- end of title -->
+  <%- include('button-admin-save.ejs') %>
+  <div class="search p-3 d-flex align-items-center justify-content-center">
+    <div class="input-group">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="cari"
+        aria-label="cari"
+        aria-describedby="button-addon2"
+        style="height: 37px"
+      />
+      <button
+        class="btn btn-outline-secondary"
+        type="button"
+        id="button-addon2"
+        style="height: 37px"
+      >
+        <span class="material-symbols-outlined"> search </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<%- include("../../public/script/script-search.html") %>

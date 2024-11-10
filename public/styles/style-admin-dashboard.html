@@ -1,0 +1,260 @@
+<style>
+  body,
+  html,
+  .main-container {
+    background-color: #343a40;
+    height: 100%;
+    margin: 0px;
+    overflow: hidden;
+    padding: 0px;
+    width: 100%;
+    min-width: 1035px;
+  }
+
+  .data-container,
+  .table-box,
+  .nav-bar-page {
+    min-width: 898px;
+  }
+
+  .baground-basic {
+    background-color: #343a40;
+  }
+
+  .roboto {
+    font-family: Roboto Mono, monospace;
+  }
+
+  .text-align-center {
+    text-align: center;
+  }
+
+  /* Custom scrollbar for WebKit browsers (Chrome, Safari) */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #495057;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6c757d;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #2b2f35;
+    border-radius: 10px;
+  }
+
+  /* input setting */
+  input,
+  select {
+    font-family: Roboto Mono, monospace;
+    height: 30px;
+    background-color: transparent;
+    color: white;
+    width: 100%;
+  }
+
+  .custom-background {
+    background-color: #ffc107;
+    color: #000000;
+    height: 30px;
+    width: 350px;
+  }
+
+  .custom-background:hover {
+    background-color: #ffff00;
+    border: solid #000000 1px;
+    color: #000000;
+  }
+
+  option {
+    background-color: #2b2f35;
+  }
+
+  .input-file {
+    display: none;
+  }
+
+  /* navbar setting */
+  .setting-nav-bar {
+    text-decoration: none;
+  }
+
+  li div:hover {
+    background-color: #198754;
+    border-radius: 5px;
+  }
+
+  .nav-bar-active {
+    background-color: #198754;
+    border-radius: 5px;
+  }
+
+  /* navbar page */
+  .list {
+    background-color: transparent;
+    white-space: nowrap;
+  }
+
+  .nav-bar-label {
+    display: none;
+  }
+
+  li:hover a .material-symbols-outlined {
+    margin-left: 25px;
+    transition: margin-left 0.4s;
+  }
+
+  li:hover button .material-symbols-outlined {
+    margin-left: 25px;
+    transition: margin-left 0.4s;
+  }
+
+  ul {
+    list-style-type: none;
+    transition: width 0.2s;
+    width: 56px;
+  }
+
+  ul:hover {
+    width: 170px;
+  }
+
+  ul:hover li .nav-bar-label {
+    display: inline;
+  }
+
+  ul:hover .material-symbols-outlined {
+    margin-right: 7px;
+  }
+
+  .nav-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .btn-delete {
+    background-color: transparent;
+    border: none;
+    color: red;
+    display: none;
+  }
+
+  .btn-delete-setting-academic-year {
+    background-color: transparent;
+    border: none;
+    color: red;
+    display: none;
+  }
+
+  /* save button */
+  .btn-save {
+    align-items: center;
+    background-color: #ffc107;
+    border: solid 1.5px black;
+    border-radius: 10px;
+    display: none;
+    height: 37px;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+    width: auto;
+    z-index: 4;
+  }
+
+  .data-container {
+    z-index: 0;
+  }
+
+  /* table */
+  /* ALL of cell */
+
+  th {
+    text-align: center;
+  }
+
+  /* input inside cell */
+  td input {
+    background-color: rgb(233, 206, 169);
+    border: solid 0px;
+    color: black;
+    outline: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  td input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+
+  .table-box {
+    height: 400px;
+    overflow: auto;
+    width: 600px;
+  }
+
+  .table-box table {
+    border-collapse: separate;
+    border-spacing: 0;
+    z-index: 0;
+  }
+
+  .table-box td {
+    border-bottom: 1px solid #bbbbbb;
+    border-left: none;
+    border-right: 1px solid #bbbbbb;
+    padding: 5px;
+    white-space: nowrap;
+  }
+
+  .table-box th {
+    background: #727272;
+    border-bottom: none;
+    border-left: none;
+    border-right: 1px solid #bbbbbb;
+    color: #e0e0e0;
+    font-weight: normal;
+    padding: 5px;
+    position: sticky;
+    top: 0;
+    white-space: nowrap;
+  }
+
+  .table-box th:nth-child(1),
+  .table-box td:nth-child(1) {
+    background-color: #343a40;
+    left: 0px;
+    min-width: 150px;
+    position: sticky;
+    width: 150px;
+  }
+
+  .table-box th:nth-child(2),
+  .table-box td:nth-child(2) {
+    background-color: #343a40;
+    left: 150px;
+    min-width: 50px;
+    position: sticky;
+    width: 50px;
+  }
+
+  .table-box th:nth-child(1),
+  .table-box th:nth-child(2) {
+    background-color: #727272;
+    z-index: 1;
+  }
+
+  .table-profile tr {
+    height: 35px;
+  }
+
+  .table-scores tr {
+    border-bottom: 1px solid #0000006f;
+    height: 35px;
+  }
+</style>

@@ -1,0 +1,90 @@
+<div class="main-container d-flex flex-column">
+  <!-- header -->
+  <%- include('../../component/header-admin-page.ejs') %>
+  <!-- main-content -->
+  <div class="main-content d-flex flex-row flex-grow-1">
+    <!-- nav-bar -->
+    <%- include('../../component/navbar-admin-page.html') %>
+    <!-- data-container -->
+    <div
+      class="data-container text-light ps-3 pe-3 flex-grow-1 d-flex flex-column"
+      style="z-index: 1; position: relative; left: 90px"
+    >
+      <div
+        class="d-flex justify-content-end"
+        style="z-index: 3; width: calc(100vw - 120px)"
+      >
+        <div class="information ms-auto align-items-start flex-grow-1">
+          <p
+            style="font-size: 13px"
+            class="d-flex align-items-center fst-italic mt-3"
+          >
+            <span class="material-symbols-outlined me-1"> info </span>
+            Terakhir diupdate 09-08-2024 10.30
+          </p>
+        </div>
+        <div
+          class="d-flex flex-row align-items-center justify-content-center mt-2"
+        >
+          <%- include('../../component/button-admin-tahunajaran.ejs') +
+          include('../../component/button-admin-tingkat.ejs') +
+          include('../../component/button-admin-kelas.ejs') +
+          include('../../component/button-admin-cawu.ejs') %>
+        </div>
+      </div>
+      <!-- table -->
+      <div
+        class="table-box border"
+        style="
+          width: calc(100vw - 120px);
+          height: calc(100vh - 182px);
+          overflow: scroll;
+        "
+      >
+        <table class="w-100">
+          <thead class="baground-basic">
+            <tr>
+              <th>Kelas</th>
+              <th>Walikelas</th>
+              <th>NIS</th>
+              <th>Nama Lengkap</th>
+              <th>Nahwu</th>
+              <th>Shorof</th>
+              <th>Fiqih</th>
+              <th>Akhlaq</th>
+              <th>Tauhid</th>
+              <th>Kepesantrenan</th>
+              <th>Baca Kitab</th>
+              <th>Praktik</th>
+              <th>Total</th>
+              <th>Rata-Rata</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1 Wustho A</td>
+              <td>Ust. Antono</td>
+              <td>2010010398</td>
+              <td>Muhammad Budiono Siregard</td>
+              <td class="editable-type-number">90</td>
+              <td class="editable-type-number">90</td>
+              <td class="editable-type-number">90</td>
+              <td class="editable-type-number">90</td>
+              <td class="editable-type-number">90</td>
+              <td class="editable-type-number">90</td>
+              <td class="editable-type-number">90</td>
+              <td class="editable-type-number">90</td>
+              <td class="editable-type-number">810</td>
+              <td class="editable-type-number">90</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- end of table -->
+    </div>
+    <!-- data of tabel -->
+  </div>
+  <!-- end of main-content -->
+</div>
+<!-- end of main-container -->
+<%- include('../../../public/script/script-input-td.html') %>

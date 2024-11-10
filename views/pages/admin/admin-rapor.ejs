@@ -1,0 +1,206 @@
+<div class="main-container d-flex flex-column">
+  <!-- header -->
+  <%- include('../../component/header-admin-page.ejs') %>
+  <!-- main-content -->
+  <div class="main-content d-flex flex-row flex-grow-1">
+    <!-- nav-bar -->
+    <%- include('../../component/navbar-admin-page.html') %>
+    <!-- data-container -->
+    <div
+      class="data-container ps-3 pe-3 flex-grow-1 d-flex flex-column"
+      style="z-index: 1; position: relative; left: 90px"
+    >
+      <div
+        class="d-flex justify-content-end"
+        style="width: calc(100vw - 107px)"
+      >
+        <div class="ms-auto align-items-start flex-grow-1 text-light">
+          <p
+            style="font-size: 15px"
+            class="fw-medium d-flex align-items-center mt-3"
+          >
+            <span class="material-symbols-outlined me-2"> arrow_back_ios </span>
+            2010010398
+            <span class="material-symbols-outlined ms-2">
+              arrow_forward_ios
+            </span>
+          </p>
+        </div>
+        <div
+          class="d-flex flex-row align-items-center justify-content-center mt-2"
+        >
+          <%- include('../../component/button-admin-tahunajaran.ejs') +
+          include('../../component/button-admin-tingkat.ejs') +
+          include('../../component/button-admin-kelas.ejs') +
+          include('../../component/button-admin-cawu.ejs') %>
+
+          <button
+            class="btn btn-warning me-2 d-flex align-items-center justify-content-center"
+            type="button"
+            style="width: 190px; height: 35px"
+          >
+            <span class="material-symbols-outlined me-1"> download </span>
+            Download Rapor
+          </button>
+          <button
+            class="btn btn-warning me-2 d-flex align-items-center justify-content-center"
+            type="button"
+            style="width: 190px; height: 35px"
+          >
+            <span class="material-symbols-outlined me-1"> print </span>
+            Cetak Rapor
+          </button>
+        </div>
+      </div>
+      <!-- rapor-box -->
+      <div
+        class="rapor-box border d-flex justify-content-center"
+        style="
+          width: calc(100vw - 107px);
+          height: calc(100vh - 182px);
+          overflow: auto;
+        "
+      >
+        <div class="row w-100">
+          <!-- profile -->
+          <div class="col-md-6 profile p-3">
+            <div
+              class="border p-3 h-100 bg-white rounded bg-opacity-75 d-flex flex-column"
+            >
+              <img
+                src="../src/foto-profil-santri.jpg"
+                alt="icon santri"
+                srcset=""
+                style="width: 150px; height: 195px"
+                class="rounded-2 border border-black border-3 mb-3"
+              />
+              <h2>
+                Muhammad Budiono Siregard
+                <span
+                  ><img
+                    style="width: 17px"
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAABkUlEQVR4nO2ZQUoDMRRAXwVn4caVF3LhMbyCIIrauu7elat260WqLmoFtx7CjQUpRSIDKXyGJk06f9JU8uAz0PkzyZufZGgGCoXCv+QQGAAzYAEY4As425CzLn6BceP+L/bcFDjQ7nwFvDo68xSQ44pj0Yb8faQtce/ogKyAKye0AqZLiXdx40s7VLbJ8bFOdKwlIcdz1SLHh+lSwohokxPaxqO2RGqBnrZEagG0JXYhoCqxKwE1iRQCvlWs11YihcBMXH+lLZFCoO95F0yAI9vZUePcQy4C9Zv72SNxavOaEotcBFYSfeCtMSdWFUBIRLWXSiCGItCkVCASU+ZA5BMZAkvPMrkulva6LCowj+y8sTHPRWDvK6CNKQINSgUi+bAPrT5mNYmXnokrOQHO7TG7ZXSOMjlWIIocl9EoikAHDIGf0OGWYnM3hkq09x1ygdw6v3Z0MCRHgwq4EW3V/583MnCsGHUJLzbkdB23bbc8PgNyuopJzIeU1ZaH/IAnK+DK0Y6FHTZ3W3wFKhQK7AF/r1Q6TMxYJrEAAAAASUVORK5CYII="
+                /></span>
+              </h2>
+              <p>2010010398</p>
+              <table class="w-100 table-profile">
+                <tr>
+                  <td>Status</td>
+                  <td>
+                    :
+                    <span class="fw-medium" style="color: rgb(49, 126, 60)"
+                      >SANTRI AKTIF</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tempat Tanggal Lahir</td>
+                  <td>: Surabaya, 09 Mei 2005</td>
+                </tr>
+                <tr>
+                  <td>Nama Ayah</td>
+                  <td>: Waluyo Siregard</td>
+                </tr>
+                <tr>
+                  <td>Nama Ibu</td>
+                  <td>: Ningsih Siregard</td>
+                </tr>
+                <tr>
+                  <td>Nama Wali</td>
+                  <td>: -</td>
+                </tr>
+                <tr>
+                  <td>Alamat</td>
+                  <td>: Jl. Bumbu kacang No. 05 Tajinan Malang</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- scores -->
+          <div class="col-md-6 p-3">
+            <div class="boerder p-3 bg-white rounded bg-opacity-75 h-100">
+              <div class="w-100">
+                <h4 class="fw-bold">1 WUSTHO A</h4>
+                <h4 class="fw-light">Ust. Imron</h4>
+              </div>
+              <table class="w-100 table-scores">
+                <thead>
+                  <tr>
+                    <th>Mata Pelajaran</th>
+                    <th>Nilai</th>
+                    <th>KKM</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Nahwu</td>
+                    <td>90</td>
+                    <td>60</td>
+                  </tr>
+                  <tr>
+                    <td>Shorof</td>
+                    <td>90</td>
+                    <td>60</td>
+                  </tr>
+                  <tr>
+                    <td>Fiqih</td>
+                    <td>90</td>
+                    <td>60</td>
+                  </tr>
+                  <tr>
+                    <td>Akhlak</td>
+                    <td>90</td>
+                    <td>60</td>
+                  </tr>
+                  <tr>
+                    <td>Tauhid</td>
+                    <td>90</td>
+                    <td>60</td>
+                  </tr>
+                  <tr>
+                    <td>Kepesantrenan</td>
+                    <td>90</td>
+                    <td>60</td>
+                  </tr>
+                  <tr>
+                    <td>Baca Kitab</td>
+                    <td>90</td>
+                    <td>60</td>
+                  </tr>
+                  <tr>
+                    <td>Praktik</td>
+                    <td>90</td>
+                    <td>60</td>
+                  </tr>
+                  <tr>
+                    <td>Total</td>
+                    <td>720</td>
+                    <td>480</td>
+                  </tr>
+                  <tr>
+                    <td>Rata-Rata</td>
+                    <td>90</td>
+                    <td>60</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="mt-5 fst-italic">
+                <span
+                  ><img
+                    style="width: 30px"
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAACcklEQVR4nO2av2sUQRTHP0kkHjmbNGpCUBKMnSgowvUB00TkMOIvENFSEGMhgn+AvTYStEzAUsv0SRRSGDXmEIlpjFWqIEgwysAThiPZ3cvN25vZnQ+85m7eMO+7u7PvvVmIRCKRSCQSibTMIHA2warW2GrK2Hb9zVpyYxRYAP6mWM3yqWUY367/PHBCO/gKsKIUgAv/z7JGNcaVA3Dhf0FTgPsBCGDWqMZUAAKYNUYBtJgq+x3wIAABzBrVuBKAAJc1BTgE/PRYgI2mDFKF88B3DwVYA86RExXgNrDkgQBLshbVDDAJU4y8AH7lKMBv4DUwhkccBh5Zj4eGAD+Ap8AQHnNAduJhhwIMy5xm7iCptSlA8PRJkdLIEHhDxhqfwtElG5fZwLatoP8Ac8Ak0ENJGAKuinm9qWlmlXeBO3lkb77RAyxaj8BCmW59w81dNr8blIRu4OMuAqzIf4XnWsIr0GyIhaYLWE5paxf6LpjsdEOj01f/QwYBPhXhLqgAp4C6VIjTGY/T7NfitPjWZa6O1ftZOQO8BdaBnX0UP2m2I3O/AU7jGZUWeoUuzPT+DuIRJ3MM/r+pnwS3gkljV3MM/ouPqfNx4FsOwa/7dvVtjgFfFYM3/cYRPOeoZHSug2+E1Dc4skfBs19bzfs7IFdt8iyZX5qZKnGAQHnoQADV425tXjkQ4CUB896BAO8IlG5gy4EAW6FWhyMO3wL2MVswXHQowAQB8jjDBw23xNZSxpq5guN5Qil7D+i1xvbKbxt7+DwjQOpNQWzKlUw6BarKmM0m30sEfAAyCzwB+lvw65d22AxwXXF9kUgkEolQYv4Bra2MTaVuRp4AAAAASUVORK5CYII="
+                /></span>
+                Peringkat ke 3 dari 30 santri
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end of table -->
+    </div>
+    <!-- data of tabel -->
+  </div>
+  <!-- end of main-content -->
+</div>
+<!-- end of main-container -->

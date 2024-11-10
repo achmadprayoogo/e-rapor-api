@@ -1,0 +1,171 @@
+<div class="main-container d-flex flex-column">
+  <!-- header -->
+  <%- include('../../component/header-admin-page.ejs') %>
+  <!-- main-content -->
+  <div class="main-content d-flex flex-row flex-grow-1">
+    <!-- nav-bar -->
+    <%- include('../../component/navbar-admin-page.html') %>
+
+    <!-- data-container -->
+    <div
+      class="data-container text-light ps-3 pe-3 d-flex flex-column align-items-center border-bottom border-end"
+      style="
+        z-index: 1;
+        position: relative;
+        left: 90px;
+        width: calc(100vw - 90px);
+      "
+    >
+      <div
+        style="position: relative"
+        class="d-flex flex-row align-items-center w-100"
+      >
+        <button
+          class="d-flex align-items-center me-auto border-0 bg-transparent text-white"
+        >
+          <span
+            onclick="window.location.href = '/admin/biodata/all'"
+            class="material-symbols-outlined"
+          >
+            arrow_back
+          </span>
+        </button>
+        <h3 class="roboto mt-3 me-auto">Input Santri Baru</h3>
+      </div>
+
+      <form
+        action="/admin/biodata/input"
+        method="post"
+        class="d-flex flex-column align-items-center w-100"
+      >
+        <div class="d-flex flex-row w-100">
+          <div class="w-50 d-flex flex-column align-items-end me-2">
+            <input
+              required
+              name="nis"
+              class="form-control p-3 mt-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="number"
+              placeholder="nomor induk santri (6 angka)*"
+              aria-label="default input example"
+            />
+            <input
+              required
+              id="nisinput"
+              name="fullName"
+              class="form-control p-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="text"
+              placeholder="nama lengkap tanpa singkatan*"
+              aria-label="default inpt example"
+            />
+            <input
+              required
+              name="cityOfBirth"
+              class="form-control p-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="text"
+              placeholder="tempat lahir*"
+              aria-label="default input example"
+            />
+            <input
+              required
+              name="dateOfBirth"
+              class="form-control p-3 mb-2 rounded-2 bg-body-secondary w-75"
+              onfocus="(this.type='date')"
+              onblur="if(this.value==''){this.type='text'}"
+              placeholder="tanggal lahir*"
+              aria-label="default input example"
+            />
+            <input
+              required
+              name="address"
+              class="form-control p-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="text"
+              placeholder="alamat*"
+              aria-label="default input example"
+            />
+            <input
+              required
+              name="fatherName"
+              class="form-control p-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="text"
+              placeholder="nama ayah*"
+              aria-label="default input example"
+            />
+            <input
+              required
+              name="motherName"
+              class="form-control p-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="text"
+              placeholder="nama ibu*"
+              aria-label="default input example"
+            />
+            <input
+              name="guardianName"
+              class="form-control p-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="text"
+              placeholder="nama wali"
+              aria-label="default input example"
+            />
+          </div>
+          <div class="w-50 d-flex flex-column align-items-start ms-2">
+            <input
+              required
+              name="status"
+              class="form-control p-3 mt-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="text"
+              placeholder="pilih status*"
+              aria-label="default input example"
+            />
+            <input
+              name="academicYear"
+              class="form-control p-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="text"
+              placeholder="pilih tahun ajaran"
+              aria-label="default input example"
+            />
+            <input
+              name="level"
+              class="form-control p-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="text"
+              placeholder="pilih tingkat"
+              aria-label="default input example"
+            />
+            <input
+              name="className"
+              class="form-control p-3 mb-2 rounded-2 bg-body-secondary w-75"
+              type="text"
+              placeholder="pilih kelas"
+              aria-label="default input example"
+            />
+            <% if (typeof result !== 'undefined' && result !== null) { %>
+            <div
+              class="h-100 w-75 mb-2 p-2"
+              style="border: 1px solid white; border-style: dashed"
+            >
+              <% if (result.name == 'error') { %>
+              <p>Error : <%= result.message %></p>
+              <% } else { %>
+              <p>
+                NIS : <%= result.nis %> <br />Nama : <%= result.name %><br />Catatan
+                : <%= result.message %>
+              </p>
+
+              <% } %>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <button
+          class="btn btn-primary mt-3 me-2 d-flex align-items-center justify-content-center w-25 roboto"
+          type="submit"
+        >
+          <span class="material-symbols-outlined me-2"> add </span>
+          Input Data
+        </button>
+      </form>
+    </div>
+    <!-- data of tabel -->
+  </div>
+  <!-- end of main-content -->
+</div>
+<!-- end of main-container -->
+<%- include("../../../public/script/script-hidden-tools-header.html") %>

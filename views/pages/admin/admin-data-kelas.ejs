@@ -1,0 +1,190 @@
+<div class="main-container d-flex flex-column">
+  <!-- header -->
+  <%- include('../../component/header-admin-page.ejs') %>
+  <!-- main-content -->
+  <div class="main-content d-flex flex-row flex-grow-1">
+    <!-- nav-bar -->
+    <%- include('../../component/navbar-admin-page.html') %>
+
+    <!-- data-container -->
+    <div
+      class="data-container text-light ps-3 pe-3 flex-grow-1 d-flex flex-column"
+      style="z-index: 1; position: relative; left: 90px"
+    >
+      <div
+        class="d-flex justify-content-end"
+        style="z-index: 3; width: calc(100vw - 107px)"
+      >
+        <div class="information ms-auto align-items-start flex-grow-1">
+          <p
+            style="font-size: 13px"
+            class="d-flex align-items-center fst-italic mt-3"
+          >
+            <span class="material-symbols-outlined me-1"> info </span>
+            Terakhir diupdate 09-08-2024 10.30
+          </p>
+        </div>
+        <div
+          class="d-flex flex-row align-items-center justify-content-center mt-2"
+        >
+          <%- include('../../component/button-admin-tahunajaran.ejs') +
+          include('../../component/button-admin-tingkat.ejs') +
+          include('../../component/button-admin-kelas.ejs') %>
+
+          <button
+            class="btn btn-warning me-2 d-flex align-items-center justify-content-center"
+            type="button"
+            style="width: 190px; height: 35px"
+          >
+            <span class="material-symbols-outlined me-1"> download </span>
+            Download Data
+          </button>
+        </div>
+      </div>
+      <!-- table -->
+      <div
+        class="table-box border"
+        style="
+          width: calc(100vw - 107px);
+          height: calc(100vh - 182px);
+          overflow: scroll;
+        "
+      >
+        <table class="w-100">
+          <thead class="baground-basic">
+            <tr>
+              <th>Tingkat</th>
+              <th>Kelas</th>
+              <th>Walikelas</th>
+              <th>NIS</th>
+              <th>Nama Lengkap</th>
+              <th>Umur</th>
+              <th colspan="2">Tempat Tangal Lahir</th>
+              <th>Nama Ayah</th>
+              <th>Nama Ibu</th>
+              <th>Nama Wali</th>
+              <th>Status</th>
+              <th>Alamat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for( let i = 0; i < data.length; i++ ) { %>
+            <tr>
+              <td id="editableTable1"><%= data[i].grade %></td>
+              <td id="editableTable2">
+                <%= data[i].grade + " " + data[i].className %>
+              </td>
+              <td><%= data[i].homeRoomTeacher %></td>
+              <td><%= data[i].nis %></td>
+              <td><%= data[i].name %></td>
+              <td><%= data[i].age %></td>
+              <td><%= data[i].placeOfBirth %></td>
+              <td><%= data[i].dateOfBirth %></td>
+              <td>W<%= data[i].fatherName %></td>
+              <td><%= data[i].motherName %></td>
+              <td><%= data[i].guardianName %></td>
+              <td><%= data[i].status %></td>
+              <td><%= data[i].address %></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <!-- end of table -->
+    </div>
+    <!-- data of tabel -->
+  </div>
+  <!-- end of main-content -->
+</div>
+<!-- end of main-container -->
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Pilihan dropdown yang akan muncul saat sel diklik dua kali
+    const options = ["1 Wustho", "2 Wustho", "3 Wustho"];
+
+    // Menambahkan event listener untuk setiap sel dalam tabel
+    document.querySelectorAll("#editableTable1").forEach(function (td) {
+      td.addEventListener("dblclick", function () {
+        // Simpan nilai asli sel
+        const originalText = td.textContent;
+
+        // Buat elemen <select> baru
+        const select = document.createElement("select");
+
+        // Buat opsi untuk <select> dari array options
+        options.forEach(function (optionText) {
+          const option = document.createElement("option");
+          option.value = optionText;
+          option.textContent = optionText;
+          // Set opsi yang sesuai dengan nilai asli sebagai pilihan default
+          if (optionText === originalText) {
+            option.selected = true;
+          }
+          select.appendChild(option);
+        });
+
+        // Ganti konten sel dengan elemen <select>
+        td.textContent = ""; // Kosongkan konten sel
+        td.appendChild(select);
+
+        // Set focus pada dropdown dan handle perubahan
+        select.focus();
+
+        // Kembalikan nilai yang dipilih ke dalam sel ketika select kehilangan fokus
+        select.addEventListener("blur", function () {
+          td.textContent = select.value;
+        });
+
+        // Kembalikan nilai ketika opsi dipilih
+        select.addEventListener("change", function () {
+          td.textContent = select.value;
+        });
+      });
+    });
+  });
+  document.addEventListener("DOMContentLoaded", function () {
+    // Pilihan dropdown yang akan muncul saat sel diklik dua kali
+    const options = ["1 Wustho A", "1 Wustho B", "1 Wustho C"];
+
+    // Menambahkan event listener untuk setiap sel dalam tabel
+    document.querySelectorAll("#editableTable2").forEach(function (td) {
+      td.addEventListener("dblclick", function () {
+        // Simpan nilai asli sel
+        const originalText = td.textContent;
+
+        // Buat elemen <select> baru
+        const select = document.createElement("select");
+
+        // Buat opsi untuk <select> dari array options
+        options.forEach(function (optionText) {
+          const option = document.createElement("option");
+          option.value = optionText;
+          option.textContent = optionText;
+          // Set opsi yang sesuai dengan nilai asli sebagai pilihan default
+          if (optionText === originalText) {
+            option.selected = true;
+          }
+          select.appendChild(option);
+        });
+
+        // Ganti konten sel dengan elemen <select>
+        td.textContent = ""; // Kosongkan konten sel
+        td.appendChild(select);
+
+        // Set focus pada dropdown dan handle perubahan
+        select.focus();
+
+        // Kembalikan nilai yang dipilih ke dalam sel ketika select kehilangan fokus
+        select.addEventListener("blur", function () {
+          td.textContent = select.value;
+        });
+
+        // Kembalikan nilai ketika opsi dipilih
+        select.addEventListener("change", function () {
+          td.textContent = select.value;
+        });
+      });
+    });
+  });
+</script>

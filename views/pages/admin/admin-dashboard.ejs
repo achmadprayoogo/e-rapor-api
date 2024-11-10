@@ -1,0 +1,39 @@
+<div class="main-container d-flex flex-column">
+  <%- include('../../component/header-admin-page.ejs') %>
+  <!-- main-content -->
+  <div class="main-content d-flex flex-row flex-grow-1">
+    <!-- nav-bar -->
+    <%- include('../../component/navbar-admin-page.html') %>
+    <!-- end of nav-bar -->
+
+    <!-- data-container -->
+    <div
+      class="data-container ps-3 pe-3 flex-grow-1 d-flex flex-column"
+      style="z-index: 1; position: relative; left: 90px"
+    >
+      <div
+        class="d-flex justify-content-end"
+        style="width: calc(100vw - 107px); height: 0px"
+      ></div>
+      <!-- dashboard-box -->
+      <div
+        class="table-box border d-flex flex-column justify-content-center align-items-center"
+        style="
+          margin-top: 16px;
+          width: calc(100vw - 107px);
+          height: calc(100vh - 141px);
+          overflow: auto;
+        "
+      >
+        <span class="fs-1 text-light material-symbols-outlined">
+          construction
+        </span>
+        <p class="fs-4 text-light">Dashboard will be avaliable soon</p>
+      </div>
+      <!-- end of table -->
+    </div>
+    <!-- end of data container -->
+  </div>
+  <!-- end of main-content -->
+</div>
+<!-- end of main-container -->

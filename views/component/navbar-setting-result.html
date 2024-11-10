@@ -1,0 +1,33 @@
+<div
+  style="height: calc(100vh - 660.72px)"
+  class="d-flex justify-content-start p-0"
+>
+  <ul
+    class="d-flex justify-content-start align-items-center w-100 text-light mb-1 mt-1 p-0"
+  >
+    <li>
+      <button
+        class="d-flex align-items-center me-auto border-0 bg-transparent text-white"
+      >
+        <span onclick="buttonBack()" class="material-symbols-outlined"
+          >arrow_back</span
+        >
+      </button>
+    </li>
+  </ul>
+</div>
+<script>
+  function buttonBack() {
+    const pathName = window.location.pathname;
+    switch (pathName) {
+      case "/admin/setting/academicyear/update":
+        window.location.href = "/admin/setting";
+        break;
+      case "/admin/setting/quarteracademicyear/update":
+        window.location.href = "/admin/setting/quarteracademicyear";
+        break;
+      default:
+        break;
+    }
+  }
+</script>

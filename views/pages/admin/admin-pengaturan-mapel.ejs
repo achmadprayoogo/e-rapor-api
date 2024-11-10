@@ -1,0 +1,101 @@
+<div class="main-container d-flex flex-column">
+  <!-- header -->
+  <%- include('../../component/header-admin-page.ejs') %>
+  <!-- main-content -->
+  <div class="main-content d-flex flex-row flex-grow-1">
+    <!-- nav-bar -->
+    <%- include('../../component/navbar-admin-page.html') %>
+    <!-- data-container -->
+    <div
+      class="data-container ps-3 pe-3 flex-grow-1 d-flex flex-column"
+      style="z-index: 1; position: relative; left: 90px"
+    >
+      <!-- nav-bar pengaturan -->
+      <%- include('../../component/navbar-pengaturan.html') %>
+      <!-- setting-box -->
+      <div
+        class="table-box border d-flex justify-content-center flex-row"
+        style="
+          width: calc(100vw - 107px);
+          height: calc(100vh - 175px);
+          overflow: auto;
+        "
+      >
+        <div
+          class="table-box border border-bottom-0 border-top-0 border-start-0 w-100 h-100 overflow-auto"
+        >
+          <table
+            style="table-layout: fixed"
+            class="w-100 overflow-auto text-light text-center"
+          >
+            <thead>
+              <tr>
+                <th style="width: 25%">Tahun Ajaran</th>
+                <th style="width: 25%">Tingkat</th>
+                <th style="width: 50%">Mata Pelajaran</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2024/2025</td>
+                <td>1 Wustho</td>
+                <td class="editable-type-text position-relative">
+                  Nahwu<button class="btn-delete position-absolute end-0">
+                    <span class="material-symbols-outlined"> delete </span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- input table -->
+        <div
+          class="w-50 form-box d-flex flex-column justify-content-center align-items-center rounded bg-opacity-50"
+        >
+          <!-- form-container -->
+          <p class="fs-2 text-light fw-bold roboto">Tambah Mata Pelajaran</p>
+          <div class="form-container w-100 p-3">
+            <form action="">
+              <select
+                class="w-100 ps-3 pe-3 mb-2 rounded-pill"
+                aria-label="default select example"
+              >
+                <option value="" disabled selected>pilih tahun ajaran</option>
+                <option value="2023/2024">2023/2024</option>
+                <option value="2024/2025">2024/2025</option>
+                <option value="2025/2026">2025/2026</option>
+              </select>
+              <select
+                class="w-100 ps-3 pe-3 mb-5 rounded-pill"
+                aria-label="default select example"
+              >
+                <option value="" disabled selected>pilih tingkat</option>
+                <option value="1 Wustho">1 Wustho</option>
+                <option value="2 Wustho">2 Wustho</option>
+                <option value="3 Wustho">3 Wustho</option>
+              </select>
+              <input
+                class="form-control w-100 p-3 mb-3 rounded-pill"
+                type="text"
+                placeholder="masukkan nama mata pelajaran"
+                aria-label="default input example"
+              />
+              <button
+                type="button"
+                class="btn custom-background w-100 p-0 rounded-pill mt-4 animate__pulse roboto"
+                style="height: 30px"
+              >
+                Tambah
+              </button>
+            </form>
+          </div>
+        </div>
+        <!-- end of settingbox -->
+      </div>
+      <!-- data of tabel -->
+    </div>
+    <!-- end of main-content -->
+  </div>
+  <!-- end of main-container -->
+  <%- include('../../../public/script/script-setting-academic-year.html') %>
+</div>

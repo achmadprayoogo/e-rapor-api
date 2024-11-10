@@ -1,0 +1,97 @@
+<div class="main-container d-flex flex-column">
+  <!-- header -->
+  <%- include('../../component/header-admin-page.ejs') %>
+  <!-- main-content -->
+  <div class="main-content d-flex flex-row flex-grow-1">
+    <!-- nav-bar -->
+    <%- include('../../component/navbar-admin-page.html') %>
+
+    <!-- data-container -->
+    <div
+      class="data-container text-light ps-3 pe-3 d-flex flex-column align-items-center border-bottom border-end"
+      style="
+        z-index: 1;
+        position: relative;
+        left: 90px;
+        width: calc(100vw - 90px);
+      "
+    >
+      <div
+        style="position: relative"
+        class="d-flex flex-row align-items-center w-100"
+      >
+        <button
+          class="d-flex align-items-center me-auto border-0 bg-transparent text-white"
+        >
+          <span
+            onclick="window.location.href = '/admin/biodata/all'"
+            class="material-symbols-outlined"
+          >
+            arrow_back
+          </span>
+        </button>
+        <h3 class="roboto mt-3 me-auto">Import Data Santri Baru</h3>
+      </div>
+
+      <form
+        action="/admin/biodata/import"
+        method="post"
+        enctype="multipart/form-data"
+        class="d-flex flex-column align-items-center justify-content-center w-100"
+        style="height: 40%;"
+      >
+        <input
+          required
+          name="file"
+          type="file"
+          class="mt-3 mb-0 rounded-2 bg-transparent border w-50"
+        />
+        <p class="d-flex justify-content-center mt-2">
+          <span class="material-symbols-outlined me-2"> warning </span> file
+          harus berupa format .csv
+        </p>
+        <button
+          class="btn btn-success mt-5d-flex align-items-center justify-content-center w-25 roboto"
+          type="submit"
+        >
+          <span class="material-symbols-outlined me-2"> download </span>
+          Import
+        </button>
+      </form>
+      <% if (typeof result !== 'undefined' && result !== null) { %>
+      <div class="overflow-auto w-75 mt-0 mb-4" style="height: calc(100vh - 430px);">
+        <table class="w-100 border-start border-end"  style=" border-spacing: 0; border-collapse: separate;">
+            <tr class="border-bottom border-top">
+              <th class="position-sticky top-0 z-3 baground-basic border-bottom border-top" style="width: 5px;">No</th>
+              <th class="position-sticky top-0 z-3 baground-basic border-bottom border-top">NIS</th>
+              <th class="position-sticky top-0 z-3 baground-basic border-bottom border-top">Nama</th>
+              <th class="position-sticky top-0 z-3 baground-basic border-bottom border-top">Status</th>
+              <th class="position-sticky top-0 z-3 baground-basic border-bottom border-top">Catatan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (let i = 0; i < result.length; i++) { %>
+            <tr>
+              <td class="text-center border-0 border-bottom"><%= i + 1 %></td>
+              <td class="text-center border-0 border-bottom"><%= result[i].nis %></td>
+              <td class="text-start border-0 border-bottom"><%= result[i].name %></td>
+              <td class="text-center border-0 border-bottom"><%= result[i].status %></td>
+              <td class="text-center border-0 border-bottom"><%= result[i].message %></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+      <% if (typeof error !== 'undefined' && error !== null) { %>
+        <div class="overflow-auto w-75 mt-0" style="height: 40%;">
+          <p class="text-danger fw-bold text-center"><%= error %></p>
+        </div>
+        <% } %>
+    </div>
+    <!-- data of tabel -->
+  </div>
+  <!-- end of main-content -->
+</div>
+<!-- end of main-container -->
+<%- include("../../../public/script/script-hidden-tools-header.html") %>

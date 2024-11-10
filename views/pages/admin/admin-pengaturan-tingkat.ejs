@@ -1,0 +1,109 @@
+<div class="main-container d-flex flex-column">
+  <!-- header -->
+  <%- include('../../component/header-admin-page.ejs') %>
+  <!-- end of header -->
+  <!-- main-content -->
+  <div class="main-content d-flex flex-row flex-grow-1">
+    <!-- nav-bar -->
+    <%- include('../../component/navbar-admin-page.html') %>
+    <!-- data-container -->
+    <div
+      class="data-container ps-3 pe-3 flex-grow-1 d-flex flex-column"
+      style="z-index: 1; position: relative; left: 90px"
+    >
+      <!-- nav-bar pengaturan -->
+      <%- include('../../component/navbar-pengaturan.html') %>
+      <!-- setting-box -->
+      <div
+        class="table-box border d-flex justify-content-center flex-row"
+        style="
+          width: calc(100vw - 107px);
+          height: calc(100vh - 175px);
+          overflow: auto;
+        "
+      >
+        <div
+          class="table-box border border-bottom-0 border-top-0 border-start-0 w-100 h-100 overflow-auto"
+        >
+          <table class="w-100 text-light text-center">
+            <thead>
+              <tr>
+                <th class="w-50">Tahun Ajaran</th>
+                <th>Tingkat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% data.gradeClasses.forEach((element) => { %>
+              <tr>
+                <td><%= element.academic_year %></td>
+                <td class="editable-type-text cell-btn-delete">
+                  <%= element.grade_class %>
+                  <button
+                    class="submit btn-delete position-absolute start-0"
+                    onclick="deleteData(parentElement.parentElement.id)"
+                  >
+                    <span class="material-symbols-outlined"> delete </span>
+                  </button>
+                </td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+        <!-- input table -->
+        <div
+          class="w-50 form-box d-flex flex-column justify-content-center align-items-center rounded bg-opacity-50"
+        >
+          <!-- form-container -->
+          <p class="fs-2 text-light fw-bold roboto">Tambah Tingkat</p>
+          <div class="form-container w-100 p-3">
+            <form action="/admin/setting/grade/input" method="post">
+              <label class="text-white roboto" for="yearName"
+                >Tahun Ajaran</label
+              >
+              <select
+                required
+                name="yearName"
+                id="yearName"
+                class="form-select w-100 w-25 ps-3 pb-0 pt-0 mb-2 rounded-pill"
+                aria-label="Default select example"
+              >
+                <option class="text-white" value="" disabled selected>
+                  Pilih Tahun Ajaran
+                </option>
+                <% data.academicYears.forEach(element => { %>
+                <option class="text-white" value="<%= element.academic_year %>">
+                  <%= element.academic_year %>
+                </option>
+                <%})%>
+              </select>
+
+              <label class="text-white roboto" for="gradeClass">Tingkat</label>
+              <input
+                required
+                id="gradeClass"
+                class="form-control w-100 p-3 mb-2 rounded-pill"
+                type="text"
+                placeholder="masukkan nama tingkat"
+                aria-label="default input example"
+              />
+
+              <button
+                type="submit"
+                class="btn custom-background w-100 p-0 rounded-pill mt-4 animate__pulse roboto"
+                style="height: 30px"
+              >
+                Tambah
+              </button>
+            </form>
+          </div>
+        </div>
+        <!-- end of settingbox -->
+      </div>
+      <!-- data of tabel -->
+    </div>
+    <!-- end of main-content -->
+  </div>
+  <!-- end of main-container -->
+  <%- include('../../../public/script/script-setting-academic-year.html') %>
+</div>

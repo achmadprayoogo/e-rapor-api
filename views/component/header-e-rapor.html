@@ -1,0 +1,58 @@
+<!-- header -->
+<div class="d-flex flex-sm-row flex-column w-100 border-bottom border-2">
+  <!-- logo -->
+  <div class="p-0 text-center d-flex align-items-center justify-content-center">
+    <img
+      src="../src/logo madin.png"
+      class="rounded"
+      alt="..."
+      width="100"
+      height="100"
+      data-aos="zoom-in"
+      data-aos-delay="200"
+    />
+  </div>
+  <!-- title -->
+  <div
+    class="title-box p-2 flex-grow-1 d-flex flex-column justify-content-center"
+  >
+    <h1 class="display-5 m-0 fw-bold text-center text-sm-start">E-RAPOR</h1>
+    <p class="m-0 fw-semibold text-center text-sm-start">
+      Madrasah Diniyah An-Nur II Al-Murtadlo
+    </p>
+    <p class="m-0 text-center text-sm-start d-none d-sm-inline">
+      Jl. Bululawang. No. 01
+      <span class="">Kec. Bululawang</span> Kab. Malang
+    </p>
+  </div>
+  <!-- dropdown -->
+  <div
+    class="dropdown-container align-items-center d-none d-sm-flex flex-column flex-lg-row me-lg-0 me-5 mb-3 mb-lg-0"
+  >
+    <div class="dropdown">
+      <button
+        class="btn btn-outline-none dropdown-toggle m-1"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Tahun Ajaran
+      </button>
+      <%- include("dropdown-academicYears.ejs") %>
+    </div>
+    <div class="dropdown">
+      <button
+        class="btn btn-outline-none dropdown-toggle m-1"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Catur Wulan
+      </button>
+      <%- include("dropdown-cawu.ejs") %>
+    </div>
+    <div class="button">
+      <button type="button" class="btn btn-dark m-1">Download PDF</button>
+    </div>
+  </div>
+</div>

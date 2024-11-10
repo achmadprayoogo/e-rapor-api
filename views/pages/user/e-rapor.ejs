@@ -1,0 +1,163 @@
+<!-- main container -->
+<div
+  class="main-container h-100 container-fluid p-3 d-flex flex-column justify-content-center align-items-center"
+>
+  <%- include('../../component/header-e-rapor.html') %>
+
+  <!-- main content -->
+  <div class="row w-100">
+    <!-- profile -->
+    <div class="col-md-6 profile p-3">
+      <div
+        class="border p-3 h-100 bg-white rounded bg-opacity-50 d-flex flex-column"
+      >
+        <img
+          src="<%= profile %>"
+          alt="icon santri"
+          srcset=""
+          style="width: 150px; height: 195px"
+          class="rounded-2 border border-black border-3 mb-3"
+        />
+        <h2>
+          <%= name %>
+          <span
+            ><img
+              style="width: 17px"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAABkUlEQVR4nO2ZQUoDMRRAXwVn4caVF3LhMbyCIIrauu7elat260WqLmoFtx7CjQUpRSIDKXyGJk06f9JU8uAz0PkzyZufZGgGCoXCv+QQGAAzYAEY4As425CzLn6BceP+L/bcFDjQ7nwFvDo68xSQ44pj0Yb8faQtce/ogKyAKye0AqZLiXdx40s7VLbJ8bFOdKwlIcdz1SLHh+lSwohokxPaxqO2RGqBnrZEagG0JXYhoCqxKwE1iRQCvlWs11YihcBMXH+lLZFCoO95F0yAI9vZUePcQy4C9Zv72SNxavOaEotcBFYSfeCtMSdWFUBIRLWXSiCGItCkVCASU+ZA5BMZAkvPMrkulva6LCowj+y8sTHPRWDvK6CNKQINSgUi+bAPrT5mNYmXnokrOQHO7TG7ZXSOMjlWIIocl9EoikAHDIGf0OGWYnM3hkq09x1ygdw6v3Z0MCRHgwq4EW3V/583MnCsGHUJLzbkdB23bbc8PgNyuopJzIeU1ZaH/IAnK+DK0Y6FHTZ3W3wFKhQK7AF/r1Q6TMxYJrEAAAAASUVORK5CYII="
+          /></span>
+        </h2>
+        <p><%= nis %></p>
+        <table class="w-100 table-profile">
+          <tr>
+            <td>Status</td>
+            <td>
+              :
+              <span class="fw-medium" style="color: rgb(49, 126, 60)"
+                ><%= status %></span
+              >
+            </td>
+          </tr>
+          <tr>
+            <td>Tempat Tanggal Lahir</td>
+            <td>: <%= placeOfBirth %>, <%= dateOfBirth %></td>
+          </tr>
+          <tr>
+            <td>Nama Ayah</td>
+            <td>: <%= fatherName %></td>
+          </tr>
+          <tr>
+            <td>Nama Ibu</td>
+            <td>: <%= motherName %></td>
+          </tr>
+          <tr>
+            <td>Nama Wali</td>
+            <td>: <%= guardianName %></td>
+          </tr>
+          <tr>
+            <td>Alamat</td>
+            <td>: <%= address %></td>
+          </tr>
+        </table>
+
+        <p class="fst-italic mt-auto" style="font-size: 13px">
+          ada kesalahan? <span><a href="#">hugungi admin.</a></span>
+        </p>
+      </div>
+    </div>
+
+    <!-- dropdown sm -->
+    <div
+      class="col-12 col-md-0 d-flex d-sm-none align-items-center justify-content-center p-0"
+    >
+      <div
+        class="dropdown-container border border-black rounded d-sm-none d-flex align-items-center justify-content-evenly"
+        style="width: 93.16%"
+      >
+        <div class="dropdown">
+          <button
+            class="btn btn-outline-none dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Tahun Ajaran
+          </button>
+          <%- include("../../component/dropdown-academicYears.ejs") %>
+        </div>
+        <div class="dropdown">
+          <button
+            class="btn btn-outline-none dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Catur Wulan
+          </button>
+          <%- include("../../component/dropdown-cawu.ejs") %>
+        </div>
+      </div>
+    </div>
+
+    <!-- scores -->
+    <div class="col-md-6 p-3">
+      <div class="boerder p-3 bg-white rounded bg-opacity-50 h-100">
+        <div class="w-100">
+          <h4 class="fw-bold"><%= className %></h4>
+          <h4 class="fw-light"><%= homeroomTeacher %></h4>
+        </div>
+        <table class="w-100 table-scores">
+          <thead>
+            <tr>
+              <th>Mata Pelajaran</th>
+              <th>Nilai</th>
+              <th>KKM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for( let i = 0; i < scores.length; i++ ) { %>
+            <tr>
+              <td><%= Object.keys(scores[i]) %></td>
+              <td><%= scores[i][Object.keys(scores[i])] %></td>
+              <td><%= KKMValue %></td>
+            </tr>
+            <% } %>
+
+            <tr>
+              <td>Total</td>
+              <td><%= totalScores %></td>
+              <td><%= totalKKM %></td>
+            </tr>
+            <tr>
+              <td>Rata-Rata</td>
+              <td><%= averageScores %></td>
+              <td><%= averageKKM %></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="mt-5 fst-italic">
+          <span
+            ><img
+              style="width: 30px"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAACcklEQVR4nO2av2sUQRTHP0kkHjmbNGpCUBKMnSgowvUB00TkMOIvENFSEGMhgn+AvTYStEzAUsv0SRRSGDXmEIlpjFWqIEgwysAThiPZ3cvN25vZnQ+85m7eMO+7u7PvvVmIRCKRSCQSibTMIHA2warW2GrK2Hb9zVpyYxRYAP6mWM3yqWUY367/PHBCO/gKsKIUgAv/z7JGNcaVA3Dhf0FTgPsBCGDWqMZUAAKYNUYBtJgq+x3wIAABzBrVuBKAAJc1BTgE/PRYgI2mDFKF88B3DwVYA86RExXgNrDkgQBLshbVDDAJU4y8AH7lKMBv4DUwhkccBh5Zj4eGAD+Ap8AQHnNAduJhhwIMy5xm7iCptSlA8PRJkdLIEHhDxhqfwtElG5fZwLatoP8Ac8Ak0ENJGAKuinm9qWlmlXeBO3lkb77RAyxaj8BCmW59w81dNr8blIRu4OMuAqzIf4XnWsIr0GyIhaYLWE5paxf6LpjsdEOj01f/QwYBPhXhLqgAp4C6VIjTGY/T7NfitPjWZa6O1ftZOQO8BdaBnX0UP2m2I3O/AU7jGZUWeoUuzPT+DuIRJ3MM/r+pnwS3gkljV3MM/ouPqfNx4FsOwa/7dvVtjgFfFYM3/cYRPOeoZHSug2+E1Dc4skfBs19bzfs7IFdt8iyZX5qZKnGAQHnoQADV425tXjkQ4CUB896BAO8IlG5gy4EAW6FWhyMO3wL2MVswXHQowAQB8jjDBw23xNZSxpq5guN5Qil7D+i1xvbKbxt7+DwjQOpNQWzKlUw6BarKmM0m30sEfAAyCzwB+lvw65d22AxwXXF9kUgkEolQYv4Bra2MTaVuRp4AAAAASUVORK5CYII="
+          /></span>
+          Peringkat ke <%= rangking %> dari <%= students %> santri
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Button Download PDF sm -->
+  <div
+    class="button col-12 d-sm-none d-flex align-items-center justify-content-center"
+  >
+    <button
+      type="button"
+      class="btn btn-outline-dark m-1"
+      style="width: 93.16%; background-color: rgb(0, 0, 0); color: #ffffff"
+    >
+      Download PDF
+    </button>
+  </div>
+
+  <%- include('../../component/footer-e-rapor.html') %>
+</div>

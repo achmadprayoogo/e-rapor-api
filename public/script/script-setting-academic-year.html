@@ -1,0 +1,403 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script>
+  let isCellLocked = true;
+  let isCellChanged = false;
+  let arrayNewData = [];
+  console.log("Script is running...");
+
+  document.querySelectorAll("td").forEach(function (cell) {
+    cell.addEventListener("dblclick", function () {
+      if (isCellLocked) {
+        return;
+      }
+
+      let buttonDelete = cell.querySelector(".btn-delete");
+      let id = cell.parentElement.id;
+
+      let isEditableCell =
+        cell.classList.contains("editable-type-text") ||
+        cell.classList.contains("editable-type-date") ||
+        cell.classList.contains("editable-type-number") ||
+        cell.classList.contains("editable-type-select");
+
+      if (isEditableCell) {
+        if (buttonDelete) {
+          buttonDelete.remove();
+        }
+        // Save current text (excluding button)
+        let currentText = cell.textContent.trim();
+
+        let input = document.createElement("input");
+        let select = document.createElement("select");
+
+        let isCellTypeText = cell.classList.contains("editable-type-text");
+        let isCellTypeDate = cell.classList.contains("editable-type-date");
+        let isCellTypeNumber = cell.classList.contains("editable-type-number");
+        let isCellTypeSelect = cell.classList.contains("editable-type-select");
+
+        if (isCellTypeText) {
+          input.type = "text";
+        } else if (isCellTypeDate) {
+          input.type = "date";
+        } else if (isCellTypeNumber) {
+          input.type = "number";
+        } else if (isCellTypeSelect) {
+          input = select;
+
+          const status = ["SANTRI AKTIF", "LULUS", "BOYONG"];
+          // Add options to select
+          for (let i = 0; i < status.length; i++) {
+            console.log(status[i]);
+            input.innerHTML += `<option value="${status[i]}">${status[i]}</option>`;
+          }
+        }
+        if (cell.classList.contains("editable-type-date")) {
+          let cellDate = replaceDateToSystemFormat(currentText);
+          cellDate = cellDate.setDate(cellDate.getDate() + 1);
+          cellDate = new Date(cellDate).toISOString().split("T")[0];
+
+          input.value = cellDate;
+          currentText = cellDate;
+        } else {
+          input.value = currentText;
+        }
+
+        cell.innerHTML = "";
+        cell.appendChild(input);
+
+        input.focus();
+
+        input.addEventListener("blur", () => {
+          input.remove();
+          addNewValue();
+          if (
+            input.value.toLocaleUpperCase() !== currentText.toLocaleUpperCase()
+          ) {
+            isCellChanged = true;
+            changeStyleCell();
+            displaySaveButton(isCellChanged);
+          }
+        });
+
+        input.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            input.remove();
+            addNewValue();
+            if (
+              input.value.toLocaleUpperCase() !==
+              currentText.toLocaleUpperCase()
+            ) {
+              changeStyleCell();
+              displaySaveButton(isCellChanged);
+            }
+          }
+        });
+
+        function changeStyleCell() {
+          cell.style.backgroundColor = "#FCDE70";
+          cell.style.transition = "background-color 0.5s";
+          cell.style.color = "black";
+          cell.style.fontWeight = "bold";
+          cell.style.textShadow = "0 0 5px white";
+        }
+
+        function addNewValue() {
+          let newText = input.value;
+
+          if (isCellTypeDate) {
+            newText = new Date(newText).toLocaleString("id-ID", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+          } else {
+            newText = newText.toUpperCase();
+          }
+
+          cell.innerHTML = newText;
+          getNewData(id);
+
+          const isCellContainButtonDelete =
+            cell.classList.contains("cell-btn-delete");
+          console.log(isCellContainButtonDelete);
+          if (isCellContainButtonDelete) {
+            console.log("This cell contain button delete");
+            cell.innerHTML =
+              newText +
+              `<button class="submit btn-delete position-absolute start-0"
+                  onclick="deleteData(parentElement.parentElement.id)"
+               >
+                  <span class="material-symbols-outlined"> delete </span>
+               </button>`;
+            makeCellEditable();
+          }
+        }
+      } else {
+        console.log("This cell is not editable.");
+      }
+    });
+  });
+
+  function getNewData(id) {
+    const row = document.getElementById(id);
+    const cells = row.children;
+    const mainTable = document.getElementById("main-table");
+    const key = mainTable.getAttribute("name");
+
+    let newData;
+
+    switch (key) {
+      case "academicYear":
+        newData = {
+          id: id,
+          academicYear: cells[0].outerText
+            .replace("delete\n", "")
+            .replace("\ndelete", "")
+            .trim(),
+          startDate: cells[1].outerText,
+          endDate: cells[2].outerText,
+        };
+        break;
+      case "quarterAcademicYear":
+        newData = {
+          id: id,
+          newId: cells[1].outerText + "-" + cells[0].outerText,
+          yearName: cells[0].outerText
+            .replace("delete\n", "")
+            .replace("\ndelete", "")
+            .trim(),
+          quarterCount: cells[1].outerText,
+          startDate: cells[2].outerText,
+          endDate: cells[3].outerText,
+        };
+        break;
+      default:
+        break;
+    }
+
+    console.log(newData);
+    addNewData(id, newData);
+  }
+
+  function addNewData(id, newData) {
+    if (arrayNewData.length === 0) {
+      arrayNewData.push(newData);
+      return;
+    }
+
+    for (let i = 0; i < arrayNewData.length + 1; i++) {
+      var newID = id;
+      var priveousID = arrayNewData[i]?.id;
+
+      var isSameID = priveousID === newID;
+      var isLastIndex = i === arrayNewData.length;
+
+      if (isSameID) {
+        console.log("Same ID");
+        arrayNewData[i] = newData;
+        break;
+      } else if (isLastIndex) {
+        arrayNewData.push(newData);
+        break;
+      }
+    }
+
+    console.log(arrayNewData);
+  }
+
+  function createInputAtFormUpdate() {
+    const form = document.getElementById("form-updateData");
+
+    let arrayNewDataInput = document.createElement("input");
+    arrayNewDataInput.type = "hidden";
+    arrayNewDataInput.name = "updatedData";
+    arrayNewDataInput.value = JSON.stringify(arrayNewData);
+    form.appendChild(arrayNewDataInput);
+  }
+
+  function submitFormUpdate() {
+    createInputAtFormUpdate();
+
+    const form = document.getElementById("form-updateData");
+    form.submit();
+  }
+
+  function deleteData(id) {
+    stylingDeletedRow(id);
+
+    const rowDeletedData = document.getElementById(id);
+    const rowName = rowDeletedData.getAttribute("name");
+
+    setTimeout(() => {
+      Swal.fire({
+        title: "Anda Yakin ?",
+        text: `Data ${rowName} yang dihapus tidak akan bisa dikembalikan!`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, tetap hapus!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Memulai Proses Hapus Data!",
+            text: `Menghapus data ${rowName}.`,
+            icon: "info",
+          }).then((result) => {
+            console.log(result);
+            createInputAtFormDelete(id, rowName);
+
+            const form = document.getElementById("form-deleteData");
+            form.submit();
+          });
+        } else {
+          removeStyleDeletedRow(id);
+        }
+      });
+    }, 500);
+  }
+
+  function createInputAtFormDelete(id, textCellDeletedData) {
+    const form = document.getElementById("form-deleteData");
+
+    let inputId = document.createElement("input");
+    inputId.type = "hidden";
+    inputId.name = "id";
+    inputId.value = id;
+    form.appendChild(inputId);
+
+    let inputTextCellDeletedData = document.createElement("input");
+    inputTextCellDeletedData.type = "hidden";
+    inputTextCellDeletedData.name = "deletedData";
+    inputTextCellDeletedData.value = textCellDeletedData;
+    form.appendChild(inputTextCellDeletedData);
+  }
+
+  function stylingDeletedRow(id) {
+    const row = document.getElementById(id);
+
+    row.style.textDecorationLine = "line-through";
+    row.style.textDecorationThickness = "2px";
+    row.style.transition = "text-decoration 0.5s";
+    row.style.textDecorationColor = "red";
+  }
+
+  function removeStyleDeletedRow(id) {
+    const row = document.getElementById(id);
+
+    row.style.textDecorationLine = "none";
+  }
+
+  function replaceDateToSystemFormat(indonesianDate) {
+    if (new Date(indonesianDate) != "Invalid Date") {
+      return new Date(indonesianDate);
+    } else {
+      const month = [
+        "januari",
+        "februari",
+        "maret",
+        "april",
+        "mei",
+        "juni",
+        "juli",
+        "agustus",
+        "september",
+        "oktober",
+        "november",
+        "desember",
+      ];
+
+      indonesianDate = indonesianDate.split(" ");
+      const day = indonesianDate[0];
+      const monthIndex = month.indexOf(indonesianDate[1].toLowerCase());
+      const year = indonesianDate[2];
+
+      return new Date(year, monthIndex, day);
+    }
+  }
+
+  function undo() {
+    location.reload();
+  }
+
+  function unlockCell() {
+    isCellLocked = !isCellLocked;
+
+    makeCellEditable();
+  }
+
+  var currentLocation = document.location.pathname;
+  var updateLocation = "/admin/biodata/update";
+  var deleteLocation = "/admin/biodata/delete";
+
+  if (currentLocation == updateLocation || currentLocation == deleteLocation) {
+    deleteLockButton();
+  }
+
+  function makeCellEditable() {
+    var buttonUnlock = document.getElementById("unlock");
+    var iconUnlock = buttonUnlock.querySelectorAll("span");
+    var buttonDelete = document.querySelectorAll(".btn-delete");
+
+    if (isCellLocked) {
+      iconUnlock[0].innerHTML = "lock";
+      iconUnlock[1].innerHTML = "Cell Terkunci";
+      buttonDelete.forEach(function (button) {
+        button.parentElement.parentElement.addEventListener(
+          "mouseenter",
+          function () {
+            button.style.display = "none";
+          }
+        );
+
+        button.parentElement.parentElement.addEventListener(
+          "mouseleave",
+          function () {
+            button.style.display = "none";
+          }
+        );
+      });
+      undisplaySaveButton();
+    } else {
+      iconUnlock[0].innerHTML = "lock_open_right";
+      iconUnlock[1].innerHTML = "Cell Terbuka";
+      buttonDelete.forEach(function (button) {
+        button.parentElement.parentElement.addEventListener(
+          "mouseenter",
+          function () {
+            button.style.display = "inline";
+          }
+        );
+
+        button.parentElement.parentElement.addEventListener(
+          "mouseleave",
+          function () {
+            button.style.display = "none";
+          }
+        );
+      });
+
+      displaySaveButton(isCellChanged);
+    }
+  }
+
+  function displaySaveButton(isCellChanged) {
+    console.log(isCellChanged);
+    if (isCellChanged == false) {
+      return;
+    }
+    var saveButton = document.querySelector(".save");
+    saveButton.classList.remove("d-none");
+    saveButton.classList.add("d-flex");
+  }
+  function undisplaySaveButton() {
+    var saveButton = document.querySelector(".save");
+    saveButton.classList.remove("d-flex");
+    saveButton.classList.add("d-none");
+  }
+</script>
