@@ -1,5 +1,6 @@
 import { util } from "../util/util.js";
-import { academicYear, quarterAcademicYear } from "../models/e-raporModels.js";
+import academicYear from "../models/academicYearModel.js";
+import quarterAcademicYear from "../models/quarterAcademicYearModel.js";
 
 const layout = "../views/layout.ejs";
 const style = "../public/styles/";

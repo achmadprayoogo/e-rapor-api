@@ -69,8 +69,20 @@ router.post(
 );
 //////////////
 router.get(
-  "/admin/setting/grade",
+  "/admin/setting/gradeclass",
   gradeClassController.getViewAdminSettingGradeClass
+);
+router.post(
+  "/admin/setting/gradeclass/input",
+  gradeClassController.inputGradeClass
+);
+router.post(
+  "/admin/setting/gradeclass/update",
+  gradeClassController.updateGradeClass
+);
+router.post(
+  "/admin/setting/gradeclass/delete",
+  gradeClassController.deleteGradeClass
 );
 router.get(
   "/admin/setting/classname",

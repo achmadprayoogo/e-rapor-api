@@ -1,12 +1,5 @@
-import { util } from "../util/util.js";
-import {
-  academicYear,
-  gradeClass,
-  data,
-  cawu,
-  grade,
-  className,
-} from "../models/e-raporModels.js";
+import academicYear from "../models/academicYearModel.js";
+import { data, cawu, grade, className } from "../models/e-raporModels.js";
 
 const layout = "../views/layout.ejs";
 const style = "../public/styles/";

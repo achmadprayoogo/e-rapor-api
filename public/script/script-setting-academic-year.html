@@ -176,6 +176,16 @@
           endDate: cells[3].outerText,
         };
         break;
+      case "gradeClass":
+        newData = {
+          id: id,
+          academicYear: cells[0].outerText
+            .replace("delete\n", "")
+            .replace("\ndelete", "")
+            .trim(),
+          gradeClassName: cells[1].outerText,
+        };
+        break;
       default:
         break;
     }

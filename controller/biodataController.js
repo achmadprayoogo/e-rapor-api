@@ -1,5 +1,5 @@
 import { util } from "../util/util.js";
-import { biodata } from "../models/e-raporModels.js";
+import biodata from "../models/biodataModel.js";
 
 const layout = "../views/layout.ejs";
 const style = "../public/styles/";
