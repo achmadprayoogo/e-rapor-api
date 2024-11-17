@@ -6,6 +6,7 @@ import academicYearController from "../controller/academicYearController.js";
 import quarterAcademicYearController from "../controller/quarterAcademicYearController.js";
 import gradeClassController from "../controller/gradeClassController.js";
 import classNameController from "../controller/classNameController.js";
+import subjectGradeClassController from "../controller/subjectGradeClassController.js";
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -84,7 +85,6 @@ router.post(
   "/admin/setting/gradeclass/delete",
   gradeClassController.deleteGradeClass
 );
-///////////
 router.get(
   "/admin/setting/classname",
   classNameController.getViewAdminSettingClassName
@@ -101,9 +101,22 @@ router.post(
   "/admin/setting/classname/delete",
   classNameController.deleteClassName
 );
+///////////
 router.get(
   "/admin/setting/subject",
-  eraporController.getViewAdminPengaturanMapel
+  subjectGradeClassController.getViewAdminSettingSubjectGradeClass
+);
+router.post(
+  "/admin/setting/subject/input",
+  subjectGradeClassController.inputSubjectGradeClass
+);
+router.post(
+  "/admin/setting/subject/update",
+  subjectGradeClassController.updateSubjectGradeClass
+);
+router.post(
+  "/admin/setting/subject/delete",
+  subjectGradeClassController.deleteSubjectGradeClass
 );
 router.get(
   "/admin/setting/username",

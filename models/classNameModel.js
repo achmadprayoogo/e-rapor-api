@@ -64,29 +64,33 @@ class className {
   }
 
   static async updateClassName(data) {
+    const className =
+      data.className.length > 0 ? data.className.toLowerCase() : null;
+    const homeroomTeacher =
+      data.homeroomTeacher.length > 0
+        ? data.homeroomTeacher.toLowerCase()
+        : null;
+    const id = data.id.length > 0 ? data.id : null;
+
     try {
       const result = await db.query(
         "UPDATE public.class_name SET class_name = $1, homeroom_teacher = $2 WHERE class_name_id = $3",
-        [
-          data.className.toLowerCase(),
-          data.homeroomTeacher.toLowerCase(),
-          data.id,
-        ]
+        [className, homeroomTeacher, data.id]
       );
       return result.rowCount > 0
         ? {
-            className: data.updatedData,
+            updatedData: `${data.className} - ${data.gradeClassName} - ${data.academicYear}`,
             status: "success",
             message: "update data is success",
           }
         : {
-            className: data.updatedData,
+            updatedData: `${data.className} - ${data.gradeClassName} - ${data.academicYear}`,
             status: "failed",
             message: "update data is failed with some reason",
           };
     } catch (error) {
       return {
-        className: data.updatedData,
+        updatedData: `${data.className} - ${data.gradeClassName} - ${data.academicYear}`,
         status: "error",
         message: error.message,
       };

@@ -60,7 +60,7 @@
                       class="position-sticky top-0 z-3 baground-basic border-bottom border-top"
                       style="width: 25%"
                     >
-                      Tingkat
+                      Kelas
                     </th>
                     <th
                       class="position-sticky top-0 z-3 baground-basic border-bottom border-top"
@@ -80,7 +80,7 @@
                   <tr class="text-center text-white">
                     <td class="border-0 border-bottom"><%= i + 1 %></td>
                     <td class="border-0 border-bottom">
-                      <%= result[i].className %>
+                      <%= result[i].updatedData %>
                     </td>
                     <td class="border-0 border-bottom">
                       <%= result[i].status || "" %>
@@ -132,7 +132,6 @@
                   <% }); %>
                 </tbody>
               </table>
-              <% } %>
             </div>
           </div>
           <!-- input table -->
@@ -218,6 +217,7 @@
               </form>
             </div>
           </div>
+          <% } %>
           <!-- end of settingbox -->
         </div>
         <!-- data of tabel -->

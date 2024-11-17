@@ -78,7 +78,7 @@ class util {
       const day = indonesianDate[0];
       const monthIndex = month.indexOf(indonesianDate[1].toLowerCase());
       const year = indonesianDate[2];
-      return new Date(year, monthIndex, day);
+      return new Date(Date.UTC(year, monthIndex, day));
     }
   }
 

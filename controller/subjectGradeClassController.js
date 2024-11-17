@@ -1,6 +1,7 @@
 import academicYear from "../models/academicYearModel.js";
 import gradeClass from "../models/gradeClassModel.js";
 import className from "../models/classNameModel.js";
+import subjectGradeClass from "../models/subjectGradeClassModel.js";
 
 const layout = "../views/layout.ejs";
 const style = "../public/styles/";
@@ -8,9 +9,9 @@ const pages = "../views/pages/";
 let timeStamp;
 
 async function getDataRender() {
-  const classNames = await className.getAll();
   const gradeClasses = await gradeClass.getAll();
   const academicYears = await academicYear.getAll();
+  const subjectGradeClasses = await subjectGradeClass.getAll();
 
   // Membuat lookup table untuk academicYears dan gradeClasses
   const academicYearsById = new Map(
@@ -20,8 +21,8 @@ async function getDataRender() {
     gradeClasses.map((gc) => [gc.grade_class_id, gc])
   );
 
-  // Menambahkan academic_year dan grade_class ke classNames
-  classNames.forEach((element) => {
+  // Menambahkan academic_year dan grade_class ke subjectGradeClasses
+  subjectGradeClasses.forEach((element) => {
     element.academic_year = academicYearsById.get(
       element.academic_year_id
     ).academic_year;
@@ -47,53 +48,52 @@ async function getDataRender() {
   });
 
   const data = {
-    classNames,
+    subjectGradeClasses,
     gradeClassByAcademicYear,
   };
 
   return data;
 }
 
-const getViewAdminSettingClassName = async (req, res) => {
+const getViewAdminSettingSubjectGradeClass = async (req, res) => {
   const data = await getDataRender();
 
   res.render(layout, {
     title: "Admin E-Rapor",
     style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-setting-class-name.ejs",
-    pagePath: "Pengaturan / Kelas",
+    page: pages + "admin/admin-pengaturan-mapel.ejs",
+    pagePath: "Pengaturan / Mapel",
     // data
     data,
   });
 };
 
-const inputClassName = async (req, res) => {
-  const result = await className.addClassName(req.body);
-
+const inputSubjectGradeClass = async (req, res) => {
+  const result = await subjectGradeClass.inputSubjectGradeClass(req.body);
+  console.log(result);
   res.render(layout, {
     title: "Admin E-Rapor",
     style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-setting-class-name.ejs",
-    pagePath: "Pengaturan / Kelas",
+    page: pages + "admin/admin-pengaturan-mapel.ejs",
+    pagePath: "Pengaturan / Mapel",
     // data
     data: await getDataRender(),
     action: "add",
-    className: result.className,
+    subjectGradeClassName: result.subjectGradeClassName,
     status: result.status,
     message: result.message,
   });
 };
 
-const updateClassName = async (req, res) => {
+const updateSubjectGradeClass = async (req, res) => {
   const arrayResult = [];
   try {
     let updatedData = req.body.updatedData;
     updatedData = JSON.parse(updatedData);
     updatedData.forEach(async (element) => {
-      const result = await className.updateClassName(element);
+      const result = await subjectGradeClass.updateSubjectGradeClass(element);
       arrayResult.push(result);
     });
-    console.log(updatedData);
   } catch (error) {
     arrayResult.push({
       updatedData: "sesion expired",
@@ -101,12 +101,11 @@ const updateClassName = async (req, res) => {
       message: error.message,
     });
   }
-
   res.render(layout, {
     title: "Admin E-Rapor",
     style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-setting-class-name.ejs",
-    pagePath: "Pengaturan / Kelas",
+    page: pages + "admin/admin-pengaturan-mapel.ejs",
+    pagePath: "Pengaturan / Mapel",
     // data
     data: await getDataRender(),
     action: "update",
@@ -114,26 +113,26 @@ const updateClassName = async (req, res) => {
   });
 };
 
-const deleteClassName = async (req, res) => {
-  const result = await className.deleteClassName(req.body);
+const deleteSubjectGradeClass = async (req, res) => {
+  const result = await subjectGradeClass.deleteSubjectGradeClass(req.body);
 
   res.render(layout, {
     title: "Admin E-Rapor",
     style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-setting-class-name.ejs",
-    pagePath: "Pengaturan / Kelas",
+    page: pages + "admin/admin-pengaturan-mapel.ejs",
+    pagePath: "Pengaturan / Mapel",
     // data
     data: await getDataRender(),
     action: "delete",
-    className: result.className,
+    subjectGradeClassName: result.subjectGradeClassName,
     status: result.status,
     message: result.message,
   });
 };
 
 export default {
-  getViewAdminSettingClassName,
-  inputClassName,
-  updateClassName,
-  deleteClassName,
+  getViewAdminSettingSubjectGradeClass,
+  inputSubjectGradeClass,
+  updateSubjectGradeClass,
+  deleteSubjectGradeClass,
 };

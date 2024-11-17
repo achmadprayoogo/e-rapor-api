@@ -189,10 +189,25 @@
       case "className":
         newData = {
           id: id,
+          academicYear: cells[0].outerText
+            .replace("delete\n", "")
+            .replace("\ndelete", "")
+            .trim(),
+          gradeClassName: cells[1].outerText,
           className: cells[2].outerText,
           homeroomTeacher: cells[3].outerText,
         };
         break;
+      case "subjectGradeClass":
+        newData = {
+          id: id,
+          academicYear: cells[0].outerText
+            .replace("delete\n", "")
+            .replace("\ndelete", "")
+            .trim(),
+          gradeClassName: cells[1].outerText,
+          subjectGradeClassName: cells[2].outerText,
+        };
       default:
         break;
     }

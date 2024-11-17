@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "mechatroner.rainbow-csv",
+    "dbaeumer.vscode-eslint",
+    "Orta.vscode-jest"
+  ]
+}
