@@ -3,8 +3,26 @@ import academicYear from "../models/academicYearModel.js";
 import quarterAcademicYear from "../models/quarterAcademicYearModel.js";
 
 const layout = "../views/layout.ejs";
-const style = "../public/styles/";
-const pages = "../views/pages/";
+const styleDir = "../public/styles/";
+const pagesDir = "../views/pages/";
+const title = "Admin E-Rapor";
+const style = styleDir + "style-admin-dashboard.html";
+const page = pagesDir + "admin/admin-setting-quarter.ejs";
+const pagePath = "Pengaturan / Cawu";
+
+const render = {
+  title,
+  style,
+  page,
+  pagePath,
+  // data
+  data: undefined,
+  action: undefined,
+  quarterAcademicYear: undefined,
+  status: undefined,
+  message: undefined,
+};
+
 let timeStamp;
 
 const getViewAdminSettingQuarterAcademicYear = async (req, res) => {
@@ -24,18 +42,14 @@ const getViewAdminSettingQuarterAcademicYear = async (req, res) => {
     academicYears,
   };
 
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-setting-quarter.ejs",
-    pagePath: "Pengaturan / Cawu",
-    // data
-    data,
-  });
+  render.data = data;
+
+  res.render(layout, render);
 };
 
 const addQuarterAcademicYear = async (req, res) => {
   const result = await quarterAcademicYear.addQuarterAcademicYear(req.body);
+  console.log(result);
   const quarterAcademicYears = await quarterAcademicYear.getAll();
   const academicYears = await academicYear.getAll();
 
@@ -52,18 +66,9 @@ const addQuarterAcademicYear = async (req, res) => {
     academicYears,
   };
 
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-setting-quarter.ejs",
-    pagePath: "Pengaturan / Cawu",
-    // data
-    data,
-    action: "add",
-    quarterAcademicYear: result.quarterAcademicYear,
-    status: result.status,
-    message: result.message,
-  });
+  render.data = data;
+
+  res.render(layout, render);
 };
 
 const updateQuarterAcademicYear = async (req, res) => {
@@ -101,16 +106,9 @@ const updateQuarterAcademicYear = async (req, res) => {
     academicYears,
   };
 
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-setting-quarter.ejs",
-    pagePath: "Pengaturan / Cawu",
-    // data
-    data,
-    action: "update",
-    result: arrayResult,
-  });
+  render.data = data;
+  render.result = arrayResult;
+  res.render(layout, render);
 };
 
 const deleteQuarterAcademicYear = async (req, res) => {
@@ -132,18 +130,7 @@ const deleteQuarterAcademicYear = async (req, res) => {
     academicYears,
   };
 
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-setting-quarter.ejs",
-    pagePath: "Pengaturan / Cawu",
-    // data
-    data,
-    action: "delete",
-    quarterAcademicYear: result.quarterAcademicYear,
-    status: result.status,
-    message: result.message,
-  });
+  res.render(layout, render);
 };
 
 export default {

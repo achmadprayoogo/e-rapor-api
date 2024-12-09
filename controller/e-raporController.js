@@ -115,24 +115,6 @@ const getViewAdminRapor = (req, res) => {
   });
 };
 
-const getViewAdminPengaturanKelas = (req, res) => {
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-pengaturan-kelas.ejs",
-    pagePath: "Pengaturan / Kelas",
-  });
-};
-
-const getViewAdminPengaturanMapel = (req, res) => {
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-pengaturan-mapel.ejs",
-    pagePath: "Pengaturan / Mapel",
-  });
-};
-
 const getViewAdminPengaturanUsername = (req, res) => {
   res.render(layout, {
     title: "Admin E-Rapor",
@@ -165,13 +147,9 @@ export default {
   getViewAuthAdminLogin,
   getViewEraporUser,
   getViewAdminDashboard,
-
   getViewAdminDataKelas,
   getViewAdminNilaiUjian,
   getViewAdminRapor,
-
-  getViewAdminPengaturanKelas,
-  getViewAdminPengaturanMapel,
   getViewAdminPengaturanUsername,
   getViewAdminPengaturanPassword,
   getViewAdminLogout,

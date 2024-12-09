@@ -1,54 +1,63 @@
-import pg from "pg";
+import Model from "../prisma/Model.js"; // Import the Prisma model
 
-const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: process.env.DB,
-  password: process.env.DB_PASSWORD,
-  port: process.env.BD_PORT,
-});
-
-db.connect();
-
-class academicYear {
+class AcademicYear {
   static async getAll() {
-    const result = await db.query(
-      "SELECT * FROM public.academic_year ORDER BY academic_year ASC"
-    );
+    const result = await Model.prisma.academic_year.findMany({
+      orderBy: {
+        academic_year: "asc",
+      },
+    });
 
-    return result.rows;
+    return result;
   }
 
   static async getAcademicYearIDByYearName(academicYearName) {
-    const result = await db.query(
-      "SELECT academic_year_id FROM public.academic_year WHERE academic_year = $1",
-      [academicYearName]
-    );
+    const result = await Model.prisma.academic_year.findUnique({
+      where: {
+        academic_year: academicYearName,
+      },
+      select: {
+        academic_year_id: true,
+      },
+    });
 
-    return result.rows[0].academic_year_id;
+    return result ? result.academic_year_id : null; // Return null if not found
+  }
+
+  static async getAcademicYearById(id) {
+    const result = await Model.prisma.academic_year.findUnique({
+      where: {
+        academic_year_id: id,
+      },
+    });
+
+    return result; // Return null if not found
   }
 
   static async inputAcademicYear(data) {
-    try {
-      const result = await db.query(
-        "INSERT INTO public.academic_year (academic_year, start_date, end_date ) VALUES ($1, $2, $3)",
-        [data.academicYear, data.startDate, data.endDate]
-      );
+    const academicYear =
+      data.academicYear.length > 0 ? data.academicYear : null;
+    const startDate = data.startDate.length > 0 ? data.startDate : null;
+    const endDate = data.endDate.length > 0 ? data.endDate : null;
 
-      return result.rowCount > 0
-        ? {
-            academicYear: data.academicYear,
-            status: "success",
-            message: "insert data is success",
-          }
-        : {
-            academicYear: data.academicYear,
-            status: "failed",
-            message: "insert data is failed with some reason",
-          };
-    } catch (error) {
+    try {
+      const result = await Model.prisma.academic_year.create({
+        data: {
+          academic_year: academicYear,
+          start_date: new Date(startDate),
+          end_date: new Date(endDate),
+        },
+      });
+      console.log(result);
       return {
-        academicYear: data.academicYear,
+        academicYear: result.academic_year,
+        status: "success",
+        message: "Insert data is successful",
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        academicYear: academicYear,
         status: "error",
         message: error.message,
       };
@@ -57,22 +66,22 @@ class academicYear {
 
   static async updateAcademicYear(data) {
     try {
-      const result = await db.query(
-        "UPDATE public.academic_year SET academic_year = $2, start_date = $3, end_date = $4 WHERE academic_year_id = $1",
-        [data.academicYearID, data.academicYear, data.startDate, data.endDate]
-      );
+      const result = await Model.prisma.academic_year.update({
+        where: {
+          academic_year_id: data.academicYearID,
+        },
+        data: {
+          academic_year: data.academicYear,
+          start_date: new Date(data.startDate),
+          end_date: new Date(data.endDate),
+        },
+      });
 
-      return result.rowCount > 0
-        ? {
-            academicYear: data.academicYear,
-            status: "success",
-            message: "update data is success",
-          }
-        : {
-            academicYear: data.academicYear,
-            status: "failed",
-            message: "update data is failed with some reason",
-          };
+      return {
+        academicYear: result.academic_year,
+        status: "success",
+        message: "Update data is successful",
+      };
     } catch (error) {
       return {
         academicYear: data.academicYear,
@@ -85,23 +94,19 @@ class academicYear {
   static async deleteAcademicYear(data) {
     const academicYearID = data.id;
     const deletedAcademicYear = data.deletedData;
-    try {
-      const result = await db.query(
-        "DELETE FROM public.academic_year WHERE academic_year_id = $1",
-        [academicYearID]
-      );
 
-      return result.rowCount > 0
-        ? {
-            academicYear: deletedAcademicYear,
-            status: "success",
-            message: "delete data is success",
-          }
-        : {
-            academicYear: deletedAcademicYear,
-            status: "failed",
-            message: "delete data is failed with some reason",
-          };
+    try {
+      const result = await Model.prisma.academic_year.delete({
+        where: {
+          academic_year_id: academicYearID,
+        },
+      });
+
+      return {
+        academicYear: deletedAcademicYear,
+        status: "success",
+        message: "Delete data is successful",
+      };
     } catch (error) {
       return {
         academicYear: deletedAcademicYear,
@@ -112,4 +117,4 @@ class academicYear {
   }
 }
 
-export default academicYear;
+export default AcademicYear;

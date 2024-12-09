@@ -1,24 +1,28 @@
-import pg from "pg";
-import academicYear from "./academicYearModel.js";
-import gradeClass from "./gradeClassModel.js";
+import Model from "../prisma/Model.js"; // Import the Prisma model
 
-const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: process.env.DB,
-  password: process.env.DB_PASSWORD,
-  port: process.env.BD_PORT,
-});
-
-db.connect();
-
-class className {
+class ClassName {
   static async getAll() {
     try {
-      const result = await db.query(
-        "SELECT * FROM public.class_name ORDER BY class_name_id ASC"
-      );
-      return result.rows;
+      const result = await Model.prisma.class_name.findMany({
+        orderBy: {
+          grade_class_id: "asc",
+        },
+      });
+      return result;
+    } catch (error) {
+      console.log(error);
+      return error.message;
+    }
+  }
+
+  static async getClassNameByID(id) {
+    try {
+      const result = await Model.prisma.class_name.findUnique({
+        where: {
+          class_name_id: id,
+        },
+      });
+      return result; // Return null if not found
     } catch (error) {
       console.log(error);
       return error.message;
@@ -26,37 +30,39 @@ class className {
   }
 
   static async addClassName(data) {
-    const academicYearID = await academicYear.getAcademicYearIDByYearName(
-      data.yearName
-    );
-    const gradeClassID = await gradeClass.getGradeClassIDByGradeClassName(
-      data.gradeClassName
-    );
+    console.log(data);
+    const gradeClassID = data.gradeClass.split("|")[0];
+    const className =
+      data.className.length > 0 ? data.className.toLowerCase() : null;
+    const homeroomTeacher =
+      data.homeroomTeacher.length > 0
+        ? data.homeroomTeacher.toLowerCase()
+        : null;
 
     try {
-      const result = await db.query(
-        "INSERT INTO public.class_name (academic_year_id, grade_class_id, class_name, homeroom_teacher) VALUES ($1, $2, $3, $4)",
-        [
-          academicYearID,
-          gradeClassID,
-          data.className.toLowerCase(),
-          data.homeroomTeacher.toLowerCase(),
-        ]
-      );
-      return result.rowCount > 0
-        ? {
-            className: `${data.className} - ${data.gradeClassName} - ${data.yearName}`,
-            status: "success",
-            message: "insert data is success",
-          }
-        : {
-            className: `${data.className} - ${data.gradeClassName} - ${data.yearName}`,
-            status: "failed",
-            message: "insert data is failed with some reason",
-          };
-    } catch (error) {
+      const result = await Model.prisma.class_name.create({
+        data: {
+          grade_class_id: gradeClassID,
+          class_name: className,
+          homeroom_teacher: homeroomTeacher,
+        },
+      });
+
+      console.log({ result: result });
+
       return {
-        className: `${data.className} - ${data.gradeClassName} - ${data.yearName}`,
+        className: `${data.className} - ${data.gradeClass.split("-")[1]} - ${
+          data.academicYear.split("-")[1]
+        }`,
+        status: "success",
+        message: "Insert data is successful",
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        className: `${data.className} - ${data.gradeClass.split("-")[1]} - ${
+          data.academicYear.split("-")[1]
+        }`,
         status: "error",
         message: error.message,
       };
@@ -73,21 +79,21 @@ class className {
     const id = data.id.length > 0 ? data.id : null;
 
     try {
-      const result = await db.query(
-        "UPDATE public.class_name SET class_name = $1, homeroom_teacher = $2 WHERE class_name_id = $3",
-        [className, homeroomTeacher, data.id]
-      );
-      return result.rowCount > 0
-        ? {
-            updatedData: `${data.className} - ${data.gradeClassName} - ${data.academicYear}`,
-            status: "success",
-            message: "update data is success",
-          }
-        : {
-            updatedData: `${data.className} - ${data.gradeClassName} - ${data.academicYear}`,
-            status: "failed",
-            message: "update data is failed with some reason",
-          };
+      const result = await Model.prisma.class_name.update({
+        where: {
+          class_name_id: id,
+        },
+        data: {
+          class_name: className,
+          homeroom_teacher: homeroomTeacher,
+        },
+      });
+
+      return {
+        updatedData: `${data.className} - ${data.gradeClassName} - ${data.academicYear}`,
+        status: "success",
+        message: "Update data is successful",
+      };
     } catch (error) {
       return {
         updatedData: `${data.className} - ${data.gradeClassName} - ${data.academicYear}`,
@@ -99,21 +105,17 @@ class className {
 
   static async deleteClassName(data) {
     try {
-      const result = await db.query(
-        "DELETE FROM public.class_name WHERE class_name_id = $1",
-        [data.id]
-      );
-      return result.rowCount > 0
-        ? {
-            className: data.deletedData,
-            status: "success",
-            message: "delete data is success",
-          }
-        : {
-            className: data.deletedData,
-            status: "failed",
-            message: "delete data is failed with some reason",
-          };
+      const result = await Model.prisma.class_name.delete({
+        where: {
+          class_name_id: data.id,
+        },
+      });
+
+      return {
+        className: data.deletedData,
+        status: "success",
+        message: "Delete data is successful",
+      };
     } catch (error) {
       return {
         className: data.deletedData,
@@ -124,4 +126,4 @@ class className {
   }
 }
 
-export default className;
+export default ClassName;

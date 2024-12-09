@@ -111,17 +111,19 @@
                   <% data.classNames.map((element) => { %>
                   <tr
                     id="<%= element.class_name_id %>"
-                    name="Kelas <%= element.class_name %> Tingkat <%= element.grade_class %> Tahun Ajaran <%= element.academic_year %>"
+                    name="Kelas <%= element.class_name %> Tingkat <%= element.grade_class.grade_class %> Tahun Ajaran <%= element.academic_year.academic_year %>"
                   >
                     <td class="cell-btn-delete">
-                      <%= element.academic_year %><button
+                      <%= element.academic_year.academic_year %><button
                         class="submit btn-delete position-absolute start-0"
                         onclick="deleteData(parentElement.parentElement.id)"
                       >
                         <span class="material-symbols-outlined"> delete </span>
                       </button>
                     </td>
-                    <td><%= element.grade_class.toUpperCase() %></td>
+                    <td>
+                      <%= element.grade_class.grade_class.toUpperCase() %>
+                    </td>
                     <td class="editable-type-text">
                       <%= element.class_name.toUpperCase() %>
                     </td>
@@ -147,7 +149,7 @@
                 >
                 <select
                   required
-                  name="yearName"
+                  name="academicYear"
                   id="yearName"
                   class="form-select w-100 w-25 ps-3 pb-0 pt-0 mb-2 rounded-pill"
                   aria-label="Default select example"
@@ -160,7 +162,7 @@
                   <option
                     class="text-white"
                     id="<%= element.academicYearId %>"
-                    value="<%= element.academicYear %>"
+                    value="<%= element.academicYearId %>|<%= element.academicYear %>"
                   >
                     <%= element.academicYear %>
                   </option>
@@ -171,7 +173,7 @@
                 >
                 <select
                   required
-                  name="gradeClassName"
+                  name="gradeClass"
                   id="gradeClass"
                   class="form-select w-100 w-25 ps-3 pb-0 pt-0 mb-2 rounded-pill"
                   aria-label="Default select example"
@@ -267,26 +269,18 @@
   </script>
   <% } %>
   <script>
-    /*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * Updates the grade class options based on the selected academic year.
-     *
-     * This function retrieves the selected academic year from a dropdown, parses
-     * the available grade classes for that year, and updates the grade class
-     * dropdown with the relevant options. If no grade classes are available for
-     * the selected academic year, a placeholder option is displayed.
-     */
-    /******  ba958a58-2d37-4ac5-8ddb-93608c0cf809  *******/
     function changeGradeClassOption() {
       const gradeSelect = document.getElementById("gradeClass");
       const academicYearSelect = document.getElementById("yearName");
-      const selectedValue = academicYearSelect.value;
+      const selectedOption = academicYearSelect.value.split("|")[0];
       let gradeClassByAcademicYear = `<%- JSON.stringify(data.gradeClassByAcademicYear) %>`;
       gradeClassByAcademicYear = JSON.parse(gradeClassByAcademicYear);
-
+      console.log(gradeClassByAcademicYear);
       const gradeClassByAcademicYearSelected = gradeClassByAcademicYear.find(
-        (element) => element.academicYear === selectedValue
+        (element) => element.academicYearId === selectedOption
       );
+      console.log(selectedOption);
+      console.log(gradeClassByAcademicYearSelected);
 
       // reset option in select to empty
       gradeSelect.innerHTML = "";
@@ -304,7 +298,8 @@
       } else {
         gradeClassByAcademicYearSelected.gradeClass.forEach((gradeClass) => {
           const option = document.createElement("option");
-          option.value = gradeClass.gradeClassName;
+          option.value =
+            gradeClass.gradeClassId + "|" + gradeClass.gradeClassName;
           option.text = gradeClass.gradeClassName;
           option.classList.add("text-white");
           option.id = gradeClass.gradeClassId;

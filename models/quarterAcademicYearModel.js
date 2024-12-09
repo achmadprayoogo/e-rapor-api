@@ -1,23 +1,15 @@
-import pg from "pg";
-import academicYear from "./academicYearModel.js";
+import Model from "../prisma/Model.js"; // Import the Prisma model
+import academicYear from "./academicYearModel.js"; // Import the academicYear model
 
-const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: process.env.DB,
-  password: process.env.DB_PASSWORD,
-  port: process.env.BD_PORT,
-});
-
-db.connect();
-
-class quarterAcademicYear {
+class QuarterAcademicYear {
   static async getAll() {
     try {
-      const result = await db.query(
-        "SELECT * FROM public.quarter_academic_year ORDER BY quarter_academic_year_id ASC"
-      );
-      return result.rows;
+      const result = await Model.prisma.quarter_academic_year.findMany({
+        orderBy: {
+          quarter_academic_year_id: "asc",
+        },
+      });
+      return result;
     } catch (error) {
       console.log(error);
       return error.message;
@@ -25,29 +17,36 @@ class quarterAcademicYear {
   }
 
   static async addQuarterAcademicYear(data) {
+    console.log(data);
     const academicYearID = await academicYear.getAcademicYearIDByYearName(
       data.yearName
     );
+    const quarterCount =
+      data.quarterCount.length > 0 ? data.quarterCount : null;
+    const startDate = data.startDate.length > 0 ? data.startDate : null;
+    const endDate = data.endDate.length > 0 ? data.endDate : null;
 
     try {
-      const result = await db.query(
-        "INSERT INTO public.quarter_academic_year (academic_year_id, quarter_academic_year, start_date, end_date ) VALUES ($1, $2, $3, $4)",
-        [academicYearID, data.quarterCount, data.startDate, data.endDate]
-      );
-      return result.rowCount > 0
-        ? {
-            quarterAcademicYear: data.quarterCount + "-" + data.yearName,
-            status: "success",
-            message: "insert data is success",
-          }
-        : {
-            quarterAcademicYear: data.quarterCount + "-" + data.yearName,
-            status: "failed",
-            message: "insert data is failed with some reason",
-          };
-    } catch (error) {
+      const result = await Model.prisma.quarter_academic_year.create({
+        data: {
+          academic_year_id: academicYearID,
+          quarter_academic_year: parseInt(quarterCount),
+          start_date: new Date(startDate),
+          end_date: new Date(endDate),
+        },
+      });
+
+      console.log({ result: result });
       return {
-        quarterAcademicYear: data.quarterCount + "-" + data.yearName,
+        quarterAcademicYear: `${data.quarterCount}-${data.yearName}`,
+        status: "success",
+        message: "Insert data is successful",
+      };
+    } catch (error) {
+      console.log("error");
+      console.log(JSON.parse(JSON.stringify(error.message)));
+      return {
+        quarterAcademicYear: `${data.quarterCount}-${data.yearName}`,
         status: "error",
         message: error.message,
       };
@@ -55,28 +54,33 @@ class quarterAcademicYear {
   }
 
   static async updateQuarterAcademicYear(data) {
-    console.log(data);
+    const quarterCount = data.quarterCount;
+    const startDate = data.startDate.length > 0 ? data.startDate : null;
+    const endDate = data.endDate.length > 0 ? data.endDate : null;
+
     try {
-      const result = await db.query(
-        "UPDATE public.quarter_academic_year SET quarter_academic_year = $2, start_date = $3, end_date = $4 WHERE quarter_academic_year_id = $1",
-        [data.id, data.quarterCount, data.startDate, data.endDate]
-      );
-      return result.rowCount > 0
-        ? {
-            quarterAcademicYear: data.newId,
-            status: "success",
-            message: "update data is success",
-          }
-        : {
-            quarterAcademicYear: data.newId,
-            status: "failed",
-            message: "update data is failed with some reason",
-          };
+      const result = await Model.prisma.quarter_academic_year.update({
+        where: {
+          quarter_academic_year_id: data.id,
+        },
+        data: {
+          quarter_academic_year: parseInt(quarterCount),
+          start_date: new Date(startDate),
+          end_date: new Date(endDate),
+        },
+      });
+
+      return {
+        quarterAcademicYear: data.newId,
+        status: "success",
+        message: "Update data is successful",
+      };
     } catch (error) {
+      console.log(error);
       return {
         quarterAcademicYear: data.newId,
         status: "error",
-        message: error.message,
+        message: error.message.trim(),
       };
     }
   }
@@ -84,22 +88,19 @@ class quarterAcademicYear {
   static async deleteQuarterAcademicYear(data) {
     const deletedID = data.id;
     const deletedQuarterAcademicYear = data.deletedData;
+
     try {
-      const result = await db.query(
-        "DELETE FROM public.quarter_academic_year WHERE quarter_academic_year_id = $1",
-        [deletedID]
-      );
-      return result.rowCount > 0
-        ? {
-            quarterAcademicYear: deletedQuarterAcademicYear,
-            status: "success",
-            message: "delete data is success",
-          }
-        : {
-            quarterAcademicYear: deletedQuarterAcademicYear,
-            status: "failed",
-            message: "delete data is failed with some reason",
-          };
+      const result = await Model.prisma.quarter_academic_year.delete({
+        where: {
+          quarter_academic_year_id: deletedID,
+        },
+      });
+
+      return {
+        quarterAcademicYear: deletedQuarterAcademicYear,
+        status: "success",
+        message: "Delete data is successful",
+      };
     } catch (error) {
       return {
         quarterAcademicYear: deletedQuarterAcademicYear,
@@ -110,4 +111,4 @@ class quarterAcademicYear {
   }
 }
 
-export default quarterAcademicYear;
+export default QuarterAcademicYear;

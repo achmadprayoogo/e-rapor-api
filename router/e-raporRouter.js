@@ -7,6 +7,8 @@ import quarterAcademicYearController from "../controller/quarterAcademicYearCont
 import gradeClassController from "../controller/gradeClassController.js";
 import classNameController from "../controller/classNameController.js";
 import subjectGradeClassController from "../controller/subjectGradeClassController.js";
+import classMemberController from "../controller/classMemberController.js";
+import settingClassMemberController from "../controller/settingClassMemberController.js";
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -37,7 +39,10 @@ router.post(
 );
 router.post("/admin/biodata/update", biodataController.updateDataAdminBiodata);
 router.post("/admin/biodata/delete", biodataController.deleteDataAdminBiodata);
-router.get("/admin/classroom/all", eraporController.getViewAdminDataKelas);
+router.get(
+  "/admin/classmember/all",
+  classMemberController.getViewAdminClassMember
+);
 router.get("/admin/testscores", eraporController.getViewAdminNilaiUjian);
 router.get("/admin/reportcard", eraporController.getViewAdminRapor);
 router.get("/admin/setting", academicYearController.getPageAdminSetting);
@@ -102,6 +107,10 @@ router.post(
   classNameController.deleteClassName
 );
 ///////////
+router.get(
+  "/admin/setting/classmember",
+  settingClassMemberController.getViewAdminClassMember
+);
 router.get(
   "/admin/setting/subject",
   subjectGradeClassController.getViewAdminSettingSubjectGradeClass

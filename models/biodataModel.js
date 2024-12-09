@@ -1,21 +1,14 @@
-import pg from "pg";
-
-const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: process.env.DB,
-  password: process.env.DB_PASSWORD,
-  port: process.env.BD_PORT,
-});
-
-db.connect();
+import Model from "../prisma/Model.js";
+import { parse } from "dotenv";
 
 class biodata {
   static async getAll() {
-    const result = await db.query(
-      "SELECT * FROM public.biodata ORDER BY nis ASC"
-    );
-    const items = result.rows;
+    const result = await Model.prisma.biodata.findMany({
+      orderBy: {
+        nis: "asc",
+      },
+    });
+    const items = result;
     const data = [];
 
     items.forEach((element) => {
@@ -36,24 +29,49 @@ class biodata {
     return data;
   }
 
+  static async getBiodataByNIS(nis) {
+    const result = await Model.prisma.biodata.findUnique({
+      where: {
+        nis: nis,
+      },
+    });
+    console.log(result);
+    const items = result;
+    const data = {
+      nis: items.nis,
+      fullname: items.fullname,
+      age: new Date().getFullYear() - items.dateofbirth.getFullYear(),
+      cityofbirth: items.cityofbirth,
+      dateofbirth: items.dateofbirth,
+      fathername: items.fathername,
+      mothername: items.mothername,
+      guardianname: items.guardianname,
+      status: items.status,
+      address: items.address,
+    };
+    if (!items) {
+      return null;
+    }
+    return data;
+  }
+
   static async inputBiodata(data) {
     try {
-      const result = await db.query(
-        "INSERT INTO public.biodata (nis, fullname, cityofbirth, dateofbirth, fathername, mothername, guardianname, status, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-        [
-          data.nis,
-          data.fullName,
-          data.cityOfBirth,
-          data.dateOfBirth,
-          data.fatherName,
-          data.motherName,
-          data.guardianName,
-          data.status,
-          data.address,
-        ]
-      );
+      const result = await Model.prisma.biodata.create({
+        data: {
+          nis: data.nis,
+          fullname: data.fullName,
+          cityofbirth: data.cityOfBirth,
+          dateofbirth: data.dateOfBirth,
+          fathername: data.fatherName,
+          mothername: data.motherName,
+          guardianname: data.guardianName,
+          status: data.status,
+          address: data.address,
+        },
+      });
 
-      return result.rowCount > 0
+      return result
         ? {
             nis: data.nis,
             name: data.fullName,
@@ -67,6 +85,7 @@ class biodata {
             message: "insert data is failed with some reason",
           };
     } catch (error) {
+      console.log(error);
       return {
         nis: data.nis,
         name: data.fullName,
@@ -79,23 +98,21 @@ class biodata {
   static async importBiodata(dataArray) {
     const result = await Promise.all(
       dataArray.map(async (data) => {
-        const query =
-          "INSERT INTO public.biodata (nis, fullname, cityofbirth, dateofbirth, fathername, mothername, guardianname, status, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)";
-        const values = [
-          parseInt(data.nis),
-          data.fullName,
-          data.cityOfBirth,
-          data.dateOfBirth,
-          data.fatherName,
-          data.motherName,
-          data.guardianName,
-          data.status,
-          data.address,
-        ];
-
         try {
-          const result = await db.query(query, values);
-          return result.rowCount > 0
+          const result = await Model.prisma.biodata.create({
+            data: {
+              nis: parseInt(data.nis),
+              fullname: data.fullName,
+              cityofbirth: data.cityOfBirth,
+              dateofbirth: new Date(data.dateOfBirth),
+              fathername: data.fatherName,
+              mothername: data.motherName,
+              guardianname: data.guardianName,
+              status: data.status,
+              address: data.address,
+            },
+          });
+          return result
             ? {
                 nis: data.nis,
                 name: data.fullName,
@@ -124,23 +141,24 @@ class biodata {
 
   static async updateBiodata(data) {
     try {
-      const result = await db.query(
-        "UPDATE public.biodata SET nis = $2, fullname = $3, cityofbirth = $4, dateofbirth = $5, fathername = $6, mothername = $7, guardianname = $8, status = $9, address = $10 WHERE nis = $1",
-        [
-          data.nis,
-          data.newNIS,
-          data.fullName,
-          data.cityOfBirth,
-          data.dateOfBirth,
-          data.fatherName,
-          data.motherName,
-          data.guardianName,
-          data.status,
-          data.address,
-        ]
-      );
-
-      return result.rowCount > 0
+      const result = await Model.prisma.biodata.update({
+        where: {
+          nis: data.nis, // The current NIS to find the record
+        },
+        data: {
+          nis: data.newNIS, // New NIS value
+          fullname: data.fullName,
+          cityofbirth: data.cityOfBirth,
+          dateofbirth: data.dateOfBirth,
+          fathername: data.fatherName,
+          mothername: data.motherName,
+          guardianname: data.guardianName,
+          status: data.status,
+          address: data.address,
+          updated_at: new Date(),
+        },
+      });
+      return result
         ? {
             nis: data.newNIS,
             name: data.fullName,
@@ -165,11 +183,12 @@ class biodata {
 
   static async deleteBiodata(nis) {
     try {
-      const result = await db.query(
-        "DELETE FROM public.biodata WHERE nis = $1",
-        [nis]
-      );
-      return result.rowCount > 0
+      const result = await Model.prisma.biodata.delete({
+        where: {
+          nis: nis,
+        },
+      });
+      return result
         ? {
             nis,
             status: "success",

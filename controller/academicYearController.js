@@ -22,7 +22,7 @@ const getPageAdminSetting = async (req, res) => {
 const inputDataAcademicYear = async (req, res) => {
   const data = req.body;
   const result = await academicYear.inputAcademicYear(data);
-
+  console.log(result);
   res.render(layout, {
     title: "Admin E-Rapor",
     style: style + "style-admin-dashboard.html",

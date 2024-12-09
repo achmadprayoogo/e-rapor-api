@@ -7,28 +7,23 @@ const style = "../public/styles/";
 const pages = "../views/pages/";
 let timeStamp;
 
+async function getAcademicYearAndGradeClass(arrayData) {
+  for (const element of arrayData) {
+    element.grade_class = await gradeClass.findGradeClassById(
+      element.grade_class_id
+    );
+    element.academic_year = await academicYear.getAcademicYearById(
+      element.grade_class.academic_year_id
+    );
+  }
+}
+
 async function getDataRender() {
-  const classNames = await className.getAll();
+  let classNames = await className.getAll();
   const gradeClasses = await gradeClass.getAll();
   const academicYears = await academicYear.getAll();
 
-  // Membuat lookup table untuk academicYears dan gradeClasses
-  const academicYearsById = new Map(
-    academicYears.map((ay) => [ay.academic_year_id, ay])
-  );
-  const gradeClassesById = new Map(
-    gradeClasses.map((gc) => [gc.grade_class_id, gc])
-  );
-
-  // Menambahkan academic_year dan grade_class ke classNames
-  classNames.forEach((element) => {
-    element.academic_year = academicYearsById.get(
-      element.academic_year_id
-    ).academic_year;
-    element.grade_class = gradeClassesById.get(
-      element.grade_class_id
-    ).grade_class;
-  });
+  await getAcademicYearAndGradeClass(classNames);
 
   // Mengumpulkan grade_class berdasarkan academic_year
   const gradeClassByAcademicYear = academicYears.map((element) => {
@@ -45,7 +40,6 @@ async function getDataRender() {
       gradeClass: filteredGradeClasses,
     };
   });
-
   const data = {
     classNames,
     gradeClassByAcademicYear,

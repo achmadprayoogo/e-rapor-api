@@ -70,7 +70,7 @@ const postViewAdminBiodataImport = async (req, res) => {
   ];
   try {
     const jsonData = util.csvToJSON(csvData, objKey);
-
+    console.log(jsonData);
     const result = await biodata.importBiodata(jsonData);
 
     res.render(layout, {
