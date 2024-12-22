@@ -1,141 +1,58 @@
-import { util } from "../util/util.js";
-import academicYear from "../models/academicYearModel.js";
-import quarterAcademicYear from "../models/quarterAcademicYearModel.js";
+import QuarterAcademicYearRepository from "../Repositories/QuarterAcademicYearRepository.js";
+import errorHandler from "../Errors/errorHandler.js";
+import JsonApi from "../Api/JsonApi.js";
 
-const layout = "../views/layout.ejs";
-const styleDir = "../public/styles/";
-const pagesDir = "../views/pages/";
-const title = "Admin E-Rapor";
-const style = styleDir + "style-admin-dashboard.html";
-const page = pagesDir + "admin/admin-setting-quarter.ejs";
-const pagePath = "Pengaturan / Cawu";
+export default class QuarterAcademicYearController {
+  static type = "quarter_academic_year";
 
-const render = {
-  title,
-  style,
-  page,
-  pagePath,
-  // data
-  data: undefined,
-  action: undefined,
-  quarterAcademicYear: undefined,
-  status: undefined,
-  message: undefined,
-};
+  static getQuarterAcademicYears = async (req, res) => {
+    try {
+      const results = await QuarterAcademicYearRepository.getData();
+      const data = JsonApi.remakeResponseData(this.type, results);
 
-let timeStamp;
-
-const getViewAdminSettingQuarterAcademicYear = async (req, res) => {
-  const quarterAcademicYears = await quarterAcademicYear.getAll();
-  const academicYears = await academicYear.getAll();
-
-  quarterAcademicYears.map((element) => {
-    const academicYear = academicYears.find(
-      (academicYear) =>
-        academicYear.academic_year_id === element.academic_year_id
-    );
-    element.academic_year = academicYear.academic_year;
-  });
-
-  const data = {
-    quarterAcademicYears,
-    academicYears,
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(res, err);
+    }
   };
 
-  render.data = data;
+  static createQuarterAcademicYear = async (req, res) => {
+    try {
+      const result = await QuarterAcademicYearRepository.create(req.body);
+      const data = JsonApi.remakeResponseData(this.type, result);
 
-  res.render(layout, render);
-};
-
-const addQuarterAcademicYear = async (req, res) => {
-  const result = await quarterAcademicYear.addQuarterAcademicYear(req.body);
-  console.log(result);
-  const quarterAcademicYears = await quarterAcademicYear.getAll();
-  const academicYears = await academicYear.getAll();
-
-  quarterAcademicYears.map((element) => {
-    const academicYear = academicYears.find(
-      (academicYear) =>
-        academicYear.academic_year_id === element.academic_year_id
-    );
-    element.academic_year = academicYear.academic_year;
-  });
-
-  const data = {
-    quarterAcademicYears,
-    academicYears,
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(res, err);
+    }
   };
 
-  render.data = data;
+  static updateQuarterAcademicYears = async (req, res) => {
+    try {
+      const dataUpdates = req.body;
+      const results = [];
 
-  res.render(layout, render);
-};
+      for (const data of dataUpdates) {
+        const result = await QuarterAcademicYearRepository.update(data);
+        results.push(result);
+      }
 
-const updateQuarterAcademicYear = async (req, res) => {
-  let updatedData = req.body.updatedData;
-  updatedData = JSON.parse(updatedData);
-  const arrayResult = [];
+      const data = JsonApi.remakeResponseData(this.type, results);
 
-  updatedData.forEach(async (element) => {
-    const remakedData = {
-      id: element.id,
-      quarterCount: parseInt(element.quarterCount),
-      startDate: util.replaceDateToSystemFormat(element.startDate),
-      endDate: util.replaceDateToSystemFormat(element.endDate),
-    };
-    const result = await quarterAcademicYear.updateQuarterAcademicYear(
-      remakedData
-    );
-
-    arrayResult.push(result);
-  });
-
-  const quarterAcademicYears = await quarterAcademicYear.getAll();
-  const academicYears = await academicYear.getAll();
-
-  quarterAcademicYears.map((element) => {
-    const academicYear = academicYears.find(
-      (academicYear) =>
-        academicYear.academic_year_id === element.academic_year_id
-    );
-    element.academic_year = academicYear.academic_year;
-  });
-
-  const data = {
-    quarterAcademicYears,
-    academicYears,
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(res, err);
+    }
   };
 
-  render.data = data;
-  render.result = arrayResult;
-  res.render(layout, render);
-};
+  static deleteQuarterAcademicYear = async (req, res) => {
+    try {
+      const result = await QuarterAcademicYearRepository.delete(req.query.id);
+      const data = JsonApi.remakeResponseData(this.type, result);
 
-const deleteQuarterAcademicYear = async (req, res) => {
-  const result = await quarterAcademicYear.deleteQuarterAcademicYear(req.body);
-
-  const quarterAcademicYears = await quarterAcademicYear.getAll();
-  const academicYears = await academicYear.getAll();
-
-  quarterAcademicYears.map((element) => {
-    const academicYear = academicYears.find(
-      (academicYear) =>
-        academicYear.academic_year_id === element.academic_year_id
-    );
-    element.academic_year = academicYear.academic_year;
-  });
-
-  const data = {
-    quarterAcademicYears,
-    academicYears,
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(res, err);
+    }
   };
-
-  res.render(layout, render);
-};
-
-export default {
-  getViewAdminSettingQuarterAcademicYear,
-  addQuarterAcademicYear,
-  updateQuarterAcademicYear,
-  deleteQuarterAcademicYear,
-};
+}

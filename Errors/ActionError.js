@@ -1,5 +1,5 @@
 export default class ActionError extends Error {
-  data = {};
+  statusCode = 422;
   constructor(message) {
     super(message);
     this.name = "ActionError";

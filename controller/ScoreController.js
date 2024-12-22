@@ -1,55 +1,49 @@
-import GradeClassRepository from "../Repositories/GradeClassRepository.js";
-import errorHandler from "../Errors/errorHandler.js";
+import ScoreRepository from "../Repositories/ScoreRepository.js";
 import JsonApi from "../Api/JsonApi.js";
+import errorHandler from "../Errors/errorHandler.js";
 
-export default class GradeClassController {
-  static type = "grade_class";
+export default class ScoreController {
+  static type = "score";
 
-  static getGradeClasses = async (req, res) => {
+  static getScores = async (req, res) => {
     try {
-      const results = await GradeClassRepository.getData();
+      const results = await ScoreRepository.getData();
       const data = JsonApi.remakeResponseData(this.type, results);
-
       res.status(200).json(data);
     } catch (err) {
       errorHandler(res, err);
     }
   };
 
-  static createGradeClass = async (req, res) => {
+  static createScore = async (req, res) => {
     try {
-      const result = await GradeClassRepository.create(req.body);
+      const result = await ScoreRepository.create(req.body);
       const data = JsonApi.remakeResponseData(this.type, result);
-
       res.status(200).json(data);
     } catch (err) {
       errorHandler(res, err);
     }
   };
 
-  static updateGradeClass = async (req, res) => {
+  static updateScore = async (req, res) => {
     try {
       const dataUpdates = req.body;
       const results = [];
-
       for (const data of dataUpdates) {
-        const result = await GradeClassRepository.update(data);
+        const result = await ScoreRepository.update(data);
         results.push(result);
       }
-
       const data = JsonApi.remakeResponseData(this.type, results);
-
       res.status(200).json(data);
     } catch (err) {
       errorHandler(res, err);
     }
   };
 
-  static deleteGradeClass = async (req, res) => {
+  static deleteScore = async (req, res) => {
     try {
-      const result = await GradeClassRepository.delete(req.query.id);
+      const result = await ScoreRepository.delete(req.query.id);
       const data = JsonApi.remakeResponseData(this.type, result);
-
       res.status(200).json(data);
     } catch (err) {
       errorHandler(res, err);

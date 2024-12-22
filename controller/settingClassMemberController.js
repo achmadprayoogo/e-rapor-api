@@ -1,8 +1,8 @@
-import academicYear from "../models/academicYearModel.js";
-import gradeClass from "../models/gradeClassModel.js";
-import classMember from "../models/classMemberModel.js";
-import className from "../models/classNameModel.js";
-import biodata from "../models/biodataModel.js";
+import academicYear from "../Repositories/AcademicYearRepository.js";
+import gradeClass from "../Repositories/gradeClassModel.js";
+import classMember from "../Repositories/classMemberModel.js";
+import className from "../Repositories/classNameModel.js";
+import biodata from "../Repositories/StudentRepository.js";
 
 const layout = "../views/layout.ejs";
 const style = "../public/styles/";
@@ -72,34 +72,28 @@ async function getDataRender() {
 
 const getViewAdminClassMember = async (req, res) => {
   const data = await getDataRender();
-  data.gradeClassByAcademicYear.forEach((element) => {
-    element.gradeClass.forEach((gradeClass) => {
-      console.log({ [gradeClass.gradeClassName]: gradeClass.className });
-    });
-    //console.log({ [element.academicYear]: element.gradeClass });
-  });
 
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-setting-class-member.ejs",
-    pagePath: "Pengaturan / Naik Kelas",
-    // data
-    data,
+  res.status(200).json({
+    data: {
+      type: "classMembers",
+      attributes: {
+        gradeClassByAcademicYear: data.gradeClassByAcademicYear,
+      },
+    },
   });
 };
 
 const getPreviewAdminClassMember = async (req, res) => {
   const data = await getDataRender();
-  console.log(data);
 
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-setting-class-member.ejs",
-    pagePath: "Pengaturan / Naik Kelas",
-    // data
-    data,
+  res.status(200).json({
+    data: {
+      type: "classMembers",
+      attributes: {
+        gradeClassByAcademicYear: data.gradeClassByAcademicYear,
+      },
+    },
   });
 };
+
 export default { getViewAdminClassMember };

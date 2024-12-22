@@ -36,7 +36,7 @@ describe("util", () => {
   describe("replaceDateToIndonesianFormat", () => {
     it("should return a date string in Indonesian format", () => {
       const date = new Date(2024, 10, 15); // 15 November 2024
-      const expectedString = "15 november 2024";
+      const expectedString = "15 November 2024";
       expect(util.replaceDateToIndonesianFormat(date)).toBe(expectedString);
     });
   });

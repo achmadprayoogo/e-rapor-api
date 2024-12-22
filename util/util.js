@@ -18,32 +18,27 @@ class util {
     if (timeStamp === undefined) {
       return "belum ada perubahan data";
     }
-    const lastUpdated = `terahir diubah: ${timeStamp.toLocaleString("id-ID", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-    })}`;
-
-    return lastUpdated;
+    const date = this.replaceDateToIndonesianFormat(timeStamp);
+    const hours = timeStamp.getHours().toString().padStart(2, '0');
+    const minutes = timeStamp.getMinutes().toString().padStart(2, '0');
+    const seconds = timeStamp.getSeconds().toString().padStart(2, '0');
+    return `terahir diubah: ${date} pukul ${hours}.${minutes}.${seconds}`;
   }
 
   static replaceDateToIndonesianFormat(date) {
     const month = [
-      "januari",
-      "februari",
-      "maret",
-      "april",
-      "mei",
-      "juni",
-      "juli",
-      "agustus",
-      "september",
-      "oktober",
-      "november",
-      "desember",
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
     ];
 
     const day = date.getDate();

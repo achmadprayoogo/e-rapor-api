@@ -1,91 +1,70 @@
-import { util } from "../util/util.js";
-import academicYear from "../models/academicYearModel.js";
+import AcademicYearRepository from "../Repositories/AcademicYearRepository.js";
+import errorHandler from "../Errors/errorHandler.js";
+import JsonApi from "../Api/JsonApi.js";
 
-const layout = "../views/layout.ejs";
-const style = "../public/styles/";
-const pages = "../views/pages/";
-let timeStamp;
+export default class AcademicYearController {
+  static type = "academic_year";
 
-const getPageAdminSetting = async (req, res) => {
-  const data = await academicYear.getAll();
-
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-pengaturan-tahunajaran.ejs",
-    pagePath: "Pengaturan / Tahun Ajaran",
-    /** data */
-    academicYears: data,
-  });
-};
-
-const inputDataAcademicYear = async (req, res) => {
-  const data = req.body;
-  const result = await academicYear.inputAcademicYear(data);
-  console.log(result);
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-pengaturan-tahunajaran.ejs",
-    pagePath: "Pengaturan / Tahun Ajaran",
-    /** data */
-    academicYears: await academicYear.getAll(),
-    action: "add",
-    academicYear: result.academicYear,
-    status: result.status,
-    message: result.message,
-  });
-};
-
-const updateAcademicYear = async (req, res) => {
-  let data = req.body.updatedData;
-  data = JSON.parse(data);
-  const arrayResult = [];
-
-  data.forEach(async (element) => {
-    const remakedData = {
-      academicYearID: element.id,
-      academicYear: element.academicYear,
-      startDate: util.replaceDateToSystemFormat(element.startDate),
-      endDate: util.replaceDateToSystemFormat(element.endDate),
+  static remakeResponseData(data) {
+    return {
+      type: "academic_year",
+      id: data.id,
+      attributes: {
+        ...data,
+        id: undefined,
+      },
     };
-    const result = await academicYear.updateAcademicYear(remakedData);
-    arrayResult.push(result);
-  });
+  }
 
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-pengaturan-tahunajaran.ejs",
-    pagePath: "Pengaturan / Tahun Ajaran",
-    /** data */
-    academicYears: await academicYear.getAll(),
-    action: "update",
-    result: arrayResult,
-  });
-};
+  static getAcademicYears = async (req, res) => {
+    try {
+      const results = await AcademicYearRepository.getData();
 
-const deleteAcademicYear = async (req, res) => {
-  const data = req.body;
-  const result = await academicYear.deleteAcademicYear(data); // id as a yearName
+      const data = JsonApi.remakeResponseData(this.type, results);
 
-  res.render(layout, {
-    title: "Admin E-Rapor",
-    style: style + "style-admin-dashboard.html",
-    page: pages + "admin/admin-pengaturan-tahunajaran.ejs",
-    pagePath: "Pengaturan / Tahun Ajaran",
-    /** data */
-    academicYears: await academicYear.getAll(),
-    action: "delete",
-    academicYear: result.academicYear,
-    status: result.status,
-    message: result.message,
-  });
-};
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(err, req, res);
+    }
+  };
 
-export default {
-  getPageAdminSetting,
-  inputDataAcademicYear,
-  updateAcademicYear,
-  deleteAcademicYear,
-};
+  static createAcademicYear = async (req, res) => {
+    try {
+      const result = await AcademicYearRepository.create(req.body);
+      const data = JsonApi.remakeResponseData(this.type, result);
+
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(res, err);
+    }
+  };
+
+  static updateAcademicYears = async (req, res) => {
+    try {
+      const dataUpdates = req.body;
+      const results = [];
+
+      for (const data of dataUpdates) {
+        const result = await AcademicYearRepository.update(data);
+        results.push(result);
+      }
+
+      const data = JsonApi.remakeResponseData(this.type, results);
+
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(res, err);
+    }
+  };
+
+  static deleteAcademicYear = async (req, res) => {
+    try {
+      const result = await AcademicYearRepository.delete(req.query.id);
+      const data = JsonApi.remakeResponseData(this.type, result);
+
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(res, err);
+    }
+  };
+}

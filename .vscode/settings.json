@@ -1,4 +1,7 @@
 {
   "files.autoSave": "onFocusChange",
-  "jest.runMode": "on-demand"
+  "jest.runMode": "on-demand",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prisma.languageServer.enabled": true
 }
