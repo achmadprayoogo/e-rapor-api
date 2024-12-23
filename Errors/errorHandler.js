@@ -1,4 +1,5 @@
-export default function errorHandler(error, req, res, next) {
+export default function errorHandler(error, res, req, next) {
+  console.error(error);
   const statusCode = error.error ? 422 : error.statusCode || 500;
   const errors = error.error
     ? [error.error]

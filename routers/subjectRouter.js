@@ -1,13 +1,16 @@
-import express from 'express';
-import SubjectController from '../controller/SubjectController.js';
+import express from "express";
+import SubjectController from "../controller/SubjectController.js";
 
 const router = express.Router();
 
 // Subject Grade Class Routes
-router.get('/admin/subject', SubjectController.getSubjects);
-router.get('/admin/subject/view', SubjectController.getViewAdminSettingSubjectGradeClass);
-router.post('/admin/subject/input', SubjectController.createSubject);
-router.patch('/admin/subject/update', SubjectController.updateSubject);
-router.delete('/admin/subject/delete', SubjectController.deleteSubject);
+router.get("/api/admin/subject", SubjectController.getSubjects);
+router.get(
+  "/api/admin/subject/view",
+  SubjectController.getViewAdminSettingSubjectGradeClass
+);
+router.post("/api/admin/subject/input", SubjectController.createSubject);
+router.patch("/api/admin/subject/update", SubjectController.updateSubject);
+router.delete("/api/admin/subject/delete", SubjectController.deleteSubject);
 
 export default router;

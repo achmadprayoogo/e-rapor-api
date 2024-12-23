@@ -75,7 +75,10 @@ export default class StudentController {
       const student = this.remakeDataRequest(req.body);
       const result = await StudentRepository.create(student);
       const data = this.remakeDataResponse(result);
-
+      console.log(
+        data.attributes.relationships.class_member[0].relationships.class_name
+          .relationships.grade_class
+      );
       res.status(200).json({
         data,
       });

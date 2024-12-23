@@ -12,8 +12,9 @@ export default class StudentRouterValidator {
     father_name: joi.string().required(),
     mother_name: joi.string().required(),
     guardian_name: joi.string().allow(""),
-    status: joi.string().required(),
+    status: joi.string().allow(""),
     address: joi.string().required(),
+    class_name_id: joi.string().length(36).required(),
   });
 
   static getValidator() {

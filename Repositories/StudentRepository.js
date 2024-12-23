@@ -1,5 +1,6 @@
 import Model from "../prisma/Model.js";
 import DatabaseError from "../Errors/DatabaseError.js";
+import { it } from "@faker-js/faker";
 
 export default class StudentRepository {
   static async getData(pagingation) {
@@ -42,6 +43,21 @@ export default class StudentRepository {
   static async create(data) {
     try {
       const result = await Model.prisma.students.create({
+        include: {
+          class_member: {
+            include: {
+              class_name: {
+                include: {
+                  grade_class: {
+                    include: {
+                      academic_year: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         data: {
           nis: parseInt(data.nis),
           fullname: data.fullname.toLowerCase(),
@@ -53,9 +69,15 @@ export default class StudentRepository {
             ? data.guardian_name.toLowerCase()
             : null,
           address: data.address.toLowerCase(),
+          class_member: {
+            create: {
+              class_name_id: data.class_name_id,
+            },
+          },
         },
       });
-      return result;
+
+      return this.setUpRelationships(result);
     } catch (error) {
       throw new DatabaseError(error);
     }
@@ -110,5 +132,82 @@ export default class StudentRepository {
     } catch (error) {
       throw new DatabaseError(error);
     }
+  }
+
+  static setUpRelationships(result) {
+    if (Array.isArray(result)) {
+      result.forEach((item) => {
+        item = {
+          ...item,
+          relationships: {
+            class_member: item.class_member.map((classMember) => {
+              classMember = {
+                ...classMember,
+                relationships: {
+                  class_name: {
+                    ...classMember.class_name,
+                    relationships: {
+                      grade_class: {
+                        ...classMember.class_name.grade_class,
+                        relationships: {
+                          academic_year:
+                            classMember.class_name.grade_class.academic_year,
+                        },
+                      },
+                    },
+                  },
+                },
+              };
+
+              classMember.class_name = undefined;
+              classMember.relationships.class_name.grade_class = undefined;
+              classMember.relationships.class_name.relationships.grade_class.academic_year =
+                undefined;
+
+              return classMember;
+            }),
+          },
+        };
+
+        item.class_member = undefined;
+      });
+
+      return result;
+    }
+
+    result = {
+      ...result,
+      relationships: {
+        class_member: result.class_member.map((item) => {
+          item = {
+            ...item,
+            relationships: {
+              class_name: {
+                ...item.class_name,
+                relationships: {
+                  grade_class: {
+                    ...item.class_name.grade_class,
+                    relationships: {
+                      academic_year: item.class_name.grade_class.academic_year,
+                    },
+                  },
+                },
+              },
+            },
+          };
+
+          item.class_name = undefined;
+          item.relationships.class_name.grade_class = undefined;
+          item.relationships.class_name.relationships.grade_class.academic_year =
+            undefined;
+
+          return item;
+        }),
+      },
+    };
+
+    result.class_member = undefined;
+
+    return result;
   }
 }
