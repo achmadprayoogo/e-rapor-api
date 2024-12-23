@@ -12,7 +12,35 @@ export default class ClassNameController {
 
       res.status(200).json(data);
     } catch (err) {
-      errorHandler(res, err);
+      errorHandler(err, res);
+    }
+  };
+
+  static getClassNamesById = async (req, res) => {
+    const id = req.params.class_name_id;
+
+    try {
+      const results = await ClassNameRepository.findById(id);
+      const data = JsonApi.remakeResponseData(this.type, results);
+
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(err, res);
+    }
+  };
+
+  static getClassNamesByGradeClassId = async (req, res) => {
+    const gradeClassId = req.params.grade_class_id;
+
+    try {
+      const results = await ClassNameRepository.getClaassNameByGradeClassId(
+        gradeClassId
+      );
+      const data = JsonApi.remakeResponseData(this.type, results);
+
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(err, res);
     }
   };
 
@@ -23,7 +51,7 @@ export default class ClassNameController {
 
       res.status(200).json(data);
     } catch (err) {
-      errorHandler(res, err);
+      errorHandler(err, res);
     }
   };
 
@@ -41,7 +69,7 @@ export default class ClassNameController {
 
       res.status(200).json(data);
     } catch (err) {
-      errorHandler(res, err);
+      errorHandler(err, res);
     }
   };
 
@@ -52,7 +80,7 @@ export default class ClassNameController {
 
       res.status(200).json(data);
     } catch (err) {
-      errorHandler(res, err);
+      errorHandler(err, res);
     }
   };
 }

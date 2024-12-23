@@ -48,6 +48,29 @@ export default class ClassNameRepository {
     }
   }
 
+  static async getClaassNameByGradeClassId(grade_class_id) {
+    try {
+      const result = await Model.prisma.class_name.findMany({
+        orderBy: {
+          class_name: "asc",
+        },
+        where: {
+          grade_class_id,
+        },
+        include: {
+          grade_class: {
+            include: {
+              academic_year: true,
+            },
+          },
+        },
+      });
+      return this.setUpRelationships(result);
+    } catch (error) {
+      throw new DatabaseError(error);
+    }
+  }
+
   static async findById(id) {
     try {
       const result = await Model.prisma.class_name.findUnique({
