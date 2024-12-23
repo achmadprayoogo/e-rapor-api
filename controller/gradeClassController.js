@@ -16,6 +16,21 @@ export default class GradeClassController {
     }
   };
 
+  static getGradeClassesByAcademicYearId = async (req, res) => {
+    const academicYearId = req.params.academic_year_id;
+
+    try {
+      const results = await GradeClassRepository.getDataByAcademicYearId(
+        academicYearId
+      );
+      const data = JsonApi.remakeResponseData(this.type, results);
+
+      res.status(200).json(data);
+    } catch (err) {
+      errorHandler(res, err);
+    }
+  };
+
   static createGradeClass = async (req, res) => {
     try {
       const result = await GradeClassRepository.create(req.body);

@@ -39,6 +39,25 @@ export default class GradeClassRepository {
     }
   }
 
+  static async getDataByAcademicYearId(academicYearId) {
+    try {
+      const result = await Model.prisma.grade_class.findMany({
+        orderBy: {
+          grade_class: "asc",
+        },
+        where: {
+          academic_year_id: academicYearId,
+        },
+        include: {
+          academic_year: true,
+        },
+      });
+      return this.setUpRelationships(result);
+    } catch (error) {
+      throw new DatabaseError(error);
+    }
+  }
+
   static async findById(id) {
     try {
       const result = await Model.prisma.grade_class.findUnique({
