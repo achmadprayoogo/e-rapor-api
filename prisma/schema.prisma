@@ -45,15 +45,15 @@ model students {
 model class_member {
   id String                  @unique @id @default(uuid()) @db.Char(36)
   class_name_id   String
-  stunedt_id      String
+  student_id      String
 
   class_name      class_name @relation(fields: [class_name_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student         students    @relation(fields: [stunedt_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  student         students    @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   created_at     DateTime         @default(now())
   updated_at     DateTime         @default(now())
 
-  @@unique([class_name_id, stunedt_id], map: "unique_class_name_id_student_id")
+  @@unique([class_name_id, student_id], map: "unique_class_name_id_student_id")
 }
 
 model class_name {

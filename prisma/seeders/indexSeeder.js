@@ -55,6 +55,7 @@ async function seedAll() {
 
     // Clear all existing data first
     await clearDatabase();
+    console.log("✅ Database cleared");
 
     // Seed in order of dependencies
     await seedStudents(100);

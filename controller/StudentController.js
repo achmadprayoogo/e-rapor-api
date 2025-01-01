@@ -1,10 +1,12 @@
 import { util } from "../util/util.js";
 import errorHandler from "../Errors/errorHandler.js";
 import StudentRepository from "../Repositories/StudentRepository.js";
+import JsonApi from "../Api/JsonApi.js";
 
 let timeStamp;
 
 export default class StudentController {
+  static type = "student";
   static getStudents = async (req, res) => {
     const pageNumber = parseInt(req.query.page.number);
     const pageSize = parseInt(req.query.page.size);
@@ -70,16 +72,25 @@ export default class StudentController {
     }
   };
 
+  static getStudentById = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const result = await StudentRepository.findById(id);
+
+      res.status(200).json({
+        data: JsonApi.remakeResponseData(this.type, result),
+      });
+    } catch (error) {
+      errorHandler(error, res);
+    }
+  };
+
   static createStudent = async (req, res) => {
     try {
       const student = this.remakeDataRequest(req.body);
       const result = await StudentRepository.create(student);
-      const data = this.remakeDataResponse(result);
-      console.log(
-        data.attributes.relationships.class_member[0].relationships.class_name
-          .relationships.grade_class
-      );
-      res.status(200).json({
+      const data = JsonApi.remakeResponseData(result);
+      res.status(201).json({
         data,
       });
     } catch (error) {
@@ -155,22 +166,14 @@ export default class StudentController {
 
   static updateStudents = async (req, res) => {
     try {
-      const data = req.body.students;
-      const arrayResults = [];
-
-      await Promise.all(
-        data.map(async (element) => {
-          let result = await StudentRepository.update(element);
-          result = this.remakeDataResponse(result);
-
-          arrayResults.push(result);
-        })
-      );
+      const data = req.body;
+      let result = await StudentRepository.update(data);
+      result = this.remakeDataResponse(result);
 
       timeStamp = new Date();
 
       res.status(200).json({
-        data: arrayResults,
+        data: result,
         meta: {
           info: util.getLastUpdate(timeStamp),
         },
@@ -186,6 +189,7 @@ export default class StudentController {
 
       const result = await StudentRepository.delete(id);
       const data = this.remakeDataResponse(result);
+      console.log(data);
 
       res.status(200).json({
         data,

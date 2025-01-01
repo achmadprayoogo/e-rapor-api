@@ -26,10 +26,14 @@ export async function seedClassMembers() {
       // We'll aim for about 20-25 students per class
       const studentsPerClass = Math.floor(Math.random() * 6) + 20; // Random number between 20-25
 
-      for (let i = 0; i < studentsPerClass && studentIndex < students.length; i++) {
+      for (
+        let i = 0;
+        i < studentsPerClass && studentIndex < students.length;
+        i++
+      ) {
         classMembers.push({
-          stunedt_id: students[studentIndex].id,
-          class_name_id: className.id
+          student_id: students[studentIndex].id,
+          class_name_id: className.id,
         });
         studentIndex = (studentIndex + 1) % students.length;
       }

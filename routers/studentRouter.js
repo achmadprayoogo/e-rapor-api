@@ -11,6 +11,9 @@ router.get(
   StudentRouterValidator.getValidator(),
   StudentController.getStudents
 );
+
+router.get("/api/admin/student/:id", StudentController.getStudentById);
+
 router.post(
   "/api/admin/students/input",
   StudentRouterValidator.inputValidator(),

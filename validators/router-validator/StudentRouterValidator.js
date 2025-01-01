@@ -30,6 +30,14 @@ export default class StudentRouterValidator {
     return validator.createValidator({ passError: true }).query(schema);
   }
 
+  static getByIdValidator() {
+    const schema = joi.object({
+      id: joi.string().length(36).required(),
+    });
+
+    return validator.createValidator({ passError: true }).params(schema);
+  }
+
   static inputValidator() {
     const schema = this.studentSchema;
 
@@ -64,7 +72,15 @@ export default class StudentRouterValidator {
 
   static updateValidator() {
     const schema = joi.object({
-      students: joi.array().items(this.studentSchema).min(1).required(),
+      id: joi.string().length(36).required(),
+      nis: joi.alternatives().try(joi.number(), joi.string()),
+      fullname: joi.string(),
+      city_of_birth: joi.string(),
+      birthdate: joi.date(),
+      father_name: joi.string(),
+      mother_name: joi.string(),
+      guardian_name: joi.string().allow(null),
+      address: joi.string(),
     });
 
     return validator.createValidator({ passError: true }).body(schema);

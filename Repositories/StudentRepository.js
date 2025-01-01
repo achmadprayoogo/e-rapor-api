@@ -27,7 +27,7 @@ export default class StudentRepository {
     }
   }
 
-  static async getById(id) {
+  static async findById(id) {
     try {
       const result = await Model.prisma.students.findUnique({
         where: {
@@ -110,12 +110,31 @@ export default class StudentRepository {
 
   static async delete(id) {
     try {
-      const result = await Model.prisma.students.delete({
-        where: {
-          id: id,
-        },
-      });
-      return result;
+      const [scores, class_member, student_status, students] =
+        await Model.prisma.$transaction([
+          Model.prisma.scores.deleteMany({
+            where: {
+              student_id: id,
+            },
+          }),
+          Model.prisma.class_member.deleteMany({
+            where: {
+              student_id: id,
+            },
+          }),
+          Model.prisma.student_status.deleteMany({
+            where: {
+              student_id: id,
+            },
+          }),
+          Model.prisma.students.delete({
+            where: {
+              id: id,
+            },
+          }),
+        ]);
+      console.log(scores, class_member, student_status, students);
+      return students;
     } catch (error) {
       throw new DatabaseError(error);
     }
