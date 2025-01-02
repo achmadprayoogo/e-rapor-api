@@ -7,7 +7,9 @@ let timeStamp;
 
 export default class StudentController {
   static type = "student";
+
   static getStudents = async (req, res) => {
+    const searchQuery = req.query.search;
     const pageNumber = parseInt(req.query.page.number);
     const pageSize = parseInt(req.query.page.size);
     const offsite = (pageNumber - 1) * pageSize;
@@ -18,6 +20,10 @@ export default class StudentController {
     };
 
     try {
+      if (searchQuery) {
+        await this.getStudentsBySearchQuery(req, res);
+        return;
+      }
       const data = await StudentRepository.getData(pagingation);
       const total = await StudentRepository.getTotal();
 
@@ -71,6 +77,71 @@ export default class StudentController {
       errorHandler(error, res);
     }
   };
+
+  static async getStudentsBySearchQuery(req, res) {
+    const pageNumber = parseInt(req.query.page.number);
+    const pageSize = parseInt(req.query.page.size);
+    const offsite = (pageNumber - 1) * pageSize;
+    const searchQuery = req.query.search.toLowerCase();
+
+    const pagingation = {
+      take: pageSize,
+      skip: offsite,
+    };
+
+    const data = await StudentRepository.getDataSearch(
+      pagingation,
+      searchQuery
+    );
+    const total = await StudentRepository.getTotalDataSearch(searchQuery);
+
+    const protocol = req.protocol;
+    const host = req.get("host");
+    const originalUrl = req.originalUrl;
+    const routePath = req.route.path;
+
+    const self = `${protocol}://${host}${originalUrl}`;
+    const first = `${protocol}://${host}${routePath}?page[number]=1&page[size]=${pageSize}&search=${searchQuery}`;
+    const prev =
+      pageNumber > 1
+        ? `${req.protocol}://${host}${routePath}?page[number]=${
+            pageNumber - 1
+          }&page[size]=${pageSize}&search=${searchQuery}`
+        : null;
+    const next =
+      offsite + pageSize < total
+        ? `${req.protocol}://${host}${routePath}?page[number]=${
+            pageNumber + 1
+          }&page[size]=${pageSize}&search=${searchQuery}`
+        : null;
+    const last = `${
+      req.protocol
+    }://${host}${routePath}?page[number]=${Math.ceil(
+      total / pageSize
+    )}&page[size]=${pageSize}&search=${searchQuery}`;
+
+    res.status(200).json({
+      links: {
+        self,
+        first,
+        prev,
+        next,
+        last,
+      },
+      data: this.remakeDataResponse(data),
+      meta: {
+        page: {
+          currentPage: pageNumber,
+          from: offsite + 1,
+          to: Math.min(offsite + parseInt(pageSize), total),
+          lastPage: Math.ceil(total / parseInt(pageSize)),
+          perPage: pageSize,
+          total,
+        },
+        info: util.getLastUpdate(timeStamp),
+      },
+    });
+  }
 
   static getStudentById = async (req, res) => {
     try {
@@ -189,7 +260,6 @@ export default class StudentController {
 
       const result = await StudentRepository.delete(id);
       const data = this.remakeDataResponse(result);
-      console.log(data);
 
       res.status(200).json({
         data,

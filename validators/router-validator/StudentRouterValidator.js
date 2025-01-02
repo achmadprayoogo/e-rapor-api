@@ -25,6 +25,7 @@ export default class StudentRouterValidator {
           size: joi.number().min(1).required(),
         })
         .required(),
+      search: joi.string().allow(""),
     });
 
     return validator.createValidator({ passError: true }).query(schema);

@@ -19,6 +19,118 @@ export default class StudentRepository {
     }
   }
 
+  static async getDataSearch(pagingation, query) {
+    try {
+      const result = await Model.prisma.students.findMany({
+        take: pagingation.take,
+        skip: pagingation.skip,
+        where: {
+          OR: [
+            // if query is a number, search by including nis
+            ...(query && !isNaN(parseInt(query))
+              ? [
+                  {
+                    nis: {
+                      in: [parseInt(query)],
+                    },
+                  },
+                ]
+              : []),
+            {
+              fullname: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              city_of_birth: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              father_name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              mother_name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              address: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+        orderBy: {
+          fullname: "asc",
+        },
+      });
+      return result;
+    } catch (error) {
+      throw new DatabaseError(error);
+    }
+  }
+
+  static async getTotalDataSearch(query) {
+    try {
+      return await Model.prisma.students.count({
+        where: {
+          OR: [
+            // if query is a number, search by including nis
+            ...(query && !isNaN(parseInt(query))
+              ? [
+                  {
+                    nis: {
+                      in: [parseInt(query)],
+                    },
+                  },
+                ]
+              : []),
+            {
+              fullname: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              city_of_birth: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              father_name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              mother_name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              address: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+      });
+    } catch (error) {
+      throw new DatabaseError(error);
+    }
+  }
+
   static async getTotal() {
     try {
       return await Model.prisma.students.count();
