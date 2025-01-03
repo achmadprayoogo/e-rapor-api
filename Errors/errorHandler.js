@@ -1,6 +1,17 @@
-export default function errorHandler(error, res, req, next) {
-  console.error(error);
-  const statusCode = error.error ? 422 : error.statusCode || 500;
+export default function errorHandler(error, req, res, next) {
+  const requestInfo = {
+    method: req.method,
+    body: req.body,
+    url: req.url,
+    ip: req.ip,
+    baseUrl: req.baseUrl,
+    headers: req.headers,
+  };
+
+  console.log("Request Info: ", requestInfo);
+  console.error("error handler: ", error);
+
+  const statusCode = error.error ? 422 : statusCode || 500;
   const errors = error.error
     ? [error.error]
     : [

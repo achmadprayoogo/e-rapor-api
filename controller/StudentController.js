@@ -74,7 +74,7 @@ export default class StudentController {
         },
       });
     } catch (error) {
-      errorHandler(error, res);
+      errorHandler(error, req, res);
     }
   };
 
@@ -152,7 +152,7 @@ export default class StudentController {
         data: JsonApi.remakeResponseData(this.type, result),
       });
     } catch (error) {
-      errorHandler(error, res);
+      errorHandler(error, req, res);
     }
   };
 
@@ -160,12 +160,12 @@ export default class StudentController {
     try {
       const student = this.remakeDataRequest(req.body);
       const result = await StudentRepository.create(student);
-      const data = JsonApi.remakeResponseData(result);
+      const data = JsonApi.remakeResponseData(this.type, result);
       res.status(201).json({
         data,
       });
     } catch (error) {
-      errorHandler(error, res);
+      errorHandler(error, req, res);
     }
   };
 
@@ -231,14 +231,13 @@ export default class StudentController {
         data,
       });
     } catch (error) {
-      errorHandler(error, res);
+      errorHandler(error, req, res);
     }
   };
 
   static updateStudents = async (req, res) => {
     try {
-      const data = req.body;
-      let result = await StudentRepository.update(data);
+      let result = await StudentRepository.update(req.body);
       result = this.remakeDataResponse(result);
 
       timeStamp = new Date();
@@ -250,7 +249,7 @@ export default class StudentController {
         },
       });
     } catch (error) {
-      errorHandler(error, res);
+      errorHandler(error, req, res);
     }
   };
 
@@ -265,7 +264,7 @@ export default class StudentController {
         data,
       });
     } catch (error) {
-      errorHandler(error, res);
+      errorHandler(error, req, res);
     }
   };
 }
