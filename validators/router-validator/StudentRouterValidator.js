@@ -12,7 +12,8 @@ export default class StudentRouterValidator {
     father_name: joi.string().required(),
     mother_name: joi.string().required(),
     guardian_name: joi.string().allow(""),
-    status: joi.string().allow(""),
+    status: joi.valid("active", "graduate", "dropout").required(),
+    academic_year_id: joi.string().length(36).required(),
     address: joi.string().required(),
     class_name_id: joi.string().length(36).required(),
   });
@@ -25,7 +26,16 @@ export default class StudentRouterValidator {
           size: joi.number().min(1).required(),
         })
         .required(),
+      sort: joi
+        .object({
+          by: joi.string().valid("nis", "fullname", "birthdate", "status"),
+          order: joi.string().valid("asc", "desc"),
+        })
+        .required(),
       search: joi.string().allow(""),
+      filter: joi.object({
+        academic_year_id: joi.string().length(36).allow(""),
+      }),
     });
 
     return validator.createValidator({ passError: true }).query(schema);
@@ -47,27 +57,39 @@ export default class StudentRouterValidator {
 
   static importValidator() {
     return (req, res, next) => {
-      if (!req.file) {
-        const error = new ActionError("No file uploaded");
-        error.message = "A CSV file is required for student import";
-        throw error;
+      try {
+        if (!req.file) {
+          const error = new ActionError(
+            "A CSV file is required for student import"
+          );
+          return next(error);
+        }
+
+        const { error } = joi
+          .object({
+            mimetype: joi
+              .string()
+              .valid("text/csv", "application/vnd.ms-excel")
+              .required(),
+            buffer: joi.binary().min(1).required(),
+          })
+          .validate({
+            mimetype: req.file.mimetype,
+            buffer: req.file.buffer,
+          });
+
+        if (error) {
+          return next(
+            new ActionError(
+              error.details.map((detail) => detail.message).join(", ")
+            )
+          );
+        }
+
+        next();
+      } catch (error) {
+        next(error);
       }
-
-      // Validate file properties
-      const { error } = joi
-        .object({
-          mimetype: joi
-            .string()
-            .valid("text/csv", "application/vnd.ms-excel")
-            .required(),
-          buffer: joi.binary().min(1).required(),
-        })
-        .validate({
-          mimetype: req.file.mimetype,
-          buffer: req.file.buffer,
-        });
-
-      next();
     };
   }
 

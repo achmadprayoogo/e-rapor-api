@@ -4,6 +4,7 @@ export default class DatabaseError extends Error {
     let statusCode = 500;
 
     if (typeof message === "object" && message.code) {
+      console.log("DatabaseError", message.code);
       switch (message.code) {
         case "P1000":
           errorMessage =

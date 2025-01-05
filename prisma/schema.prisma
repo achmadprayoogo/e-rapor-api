@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearchPostgres"]
 }
 
@@ -9,126 +9,116 @@ datasource db {
 }
 
 model academic_year {
-  id      String                  @unique @id @default(uuid()) @db.Char(36)
-  academic_year         String                  @unique(map: "unique_academic_year") @db.VarChar(10)
-  start_date            DateTime?               @db.Date
-  end_date              DateTime?               @db.Date
-
-  created_at            DateTime                @default(now())
-  updated_at            DateTime                @default(now())
+  id            String    @id @unique @default(uuid()) @db.Char(36)
+  academic_year String    @unique(map: "unique_academic_year") @db.VarChar(10)
+  start_date    DateTime? @db.Date
+  end_date      DateTime? @db.Date
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now())
 
   grade_class           grade_class[]
   quarter_academic_year quarter_academic_year[]
   student_status        student_status[]
 }
 
-
 model students {
-  id             String           @unique @id @default(uuid()) @db.Char(36)
-  nis            Int             @unique 
-  fullname       String          @db.VarChar(80)
-  city_of_birth    String          @db.VarChar(80)
-  birthdate    DateTime        @db.Date
-  father_name     String          @db.VarChar(80)
-  mother_name     String          @db.VarChar(80)
-  guardian_name   String?         @db.VarChar(80)
-  address        String          @db.VarChar(80)
-
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @default(now())
+  id            String   @id @unique @default(uuid()) @db.Char(36)
+  nis           Int      @unique
+  fullname      String   @db.VarChar(80)
+  city_of_birth String   @db.VarChar(80)
+  birthdate     DateTime @db.Date
+  father_name   String   @db.VarChar(80)
+  mother_name   String   @db.VarChar(80)
+  guardian_name String?  @db.VarChar(80)
+  address       String   @db.VarChar(80)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now())
 
   class_member   class_member[]
   student_status student_status[]
-  scores          scores[]
+  scores         scores[]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model class_member {
-  id String                  @unique @id @default(uuid()) @db.Char(36)
-  class_name_id   String
-  student_id      String
+  id            String   @id @unique @default(uuid()) @db.Char(36)
+  class_name_id String
+  student_id    String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now())
 
-  class_name      class_name @relation(fields: [class_name_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student         students    @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @default(now())
+  class_name class_name @relation(fields: [class_name_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  student    students   @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([class_name_id, student_id], map: "unique_class_name_id_student_id")
 }
 
 model class_name {
-  id    String                  @unique @id @default(uuid()) @db.Char(36)
+  id               String   @id @unique @default(uuid()) @db.Char(36)
   grade_class_id   String
-  class_name       String         @db.VarChar(10)
-  homeroom_teacher String         @db.VarChar(20)
+  class_name       String   @db.VarChar(10)
+  homeroom_teacher String   @db.VarChar(20)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @default(now())
 
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @default(now())
-
-  class_member     class_member[]
-  grade_class      grade_class    @relation(fields: [grade_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  class_member class_member[]
+  grade_class  grade_class    @relation(fields: [grade_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([class_name, grade_class_id], map: "unique_class_grade")
 }
 
 model grade_class {
-  id      String                  @unique @id @default(uuid()) @db.Char(36)
-  academic_year_id    String
-  grade_class         String                @db.VarChar(30)
+  id               String   @id @unique @default(uuid()) @db.Char(36)
+  academic_year_id String
+  grade_class      String   @db.VarChar(30)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @default(now())
 
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @default(now())
-  
-  class_name          class_name[]
-  academic_year       academic_year         @relation(fields: [academic_year_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  subject subject[]
+  class_name    class_name[]
+  academic_year academic_year @relation(fields: [academic_year_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subject       subject[]
 
   @@unique([academic_year_id, grade_class])
 }
 
 model quarter_academic_year {
-  id                       String        @unique @id @default(uuid()) @db.Char(36)
-  academic_year_id         String
-  quarter_academic_year    Int
-  start_date               DateTime?     @db.Date
-  end_date                 DateTime?     @db.Date
-  academic_year            academic_year @relation(fields: [academic_year_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  created_at               DateTime       @default(now())
-  updated_at               DateTime       @default(now())
+  id                    String        @id @unique @default(uuid()) @db.Char(36)
+  academic_year_id      String
+  quarter_academic_year Int
+  start_date            DateTime?     @db.Date
+  end_date              DateTime?     @db.Date
+  academic_year         academic_year @relation(fields: [academic_year_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  created_at            DateTime      @default(now())
+  updated_at            DateTime      @default(now())
 
   @@unique([academic_year_id, quarter_academic_year])
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model student_status {
-  id               String           @unique @id @default(uuid()) @db.Char(36)
+  id               String        @id @unique @default(uuid()) @db.Char(36)
   academic_year_id String
   student_id       String
+  status           StudentStatus @default(active)
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @default(now())
 
-  status           StudentStatus    @default(active)
-
-  created_at       DateTime         @default(now())
-  updated_at       DateTime         @default(now())
-
-  academic_year    academic_year    @relation(fields: [academic_year_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student          students         @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
+  academic_year academic_year @relation(fields: [academic_year_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  student       students      @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([academic_year_id, student_id])
 }
 
 model subject {
-  id              String           @unique @id @default(uuid()) @db.Char(36)
-  grade_class_id  String
-  subject_name    String           @db.VarChar(30)
+  id             String   @id @unique @default(uuid()) @db.Char(36)
+  grade_class_id String
+  subject_name   String   @db.VarChar(30)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @default(now())
 
-  created_at      DateTime         @default(now())
-  updated_at      DateTime         @default(now())
+  grade_class grade_class @relation(fields: [grade_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  scores      scores[]
 
-  grade_class     grade_class      @relation(fields: [grade_class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  scores          scores[]
   @@unique([subject_name, grade_class_id])
 }
 
@@ -139,15 +129,14 @@ enum StudentStatus {
 }
 
 model scores {
-  id              String           @unique @id @default(uuid()) @db.Char(36)
-  student_id      String
-  subject_id      String
-  score           Int
-  created_at      DateTime         @default(now())
-  updated_at      DateTime         @default(now())
-
-  student         students         @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  subject         subject          @relation(fields: [subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id         String   @id @unique @default(uuid()) @db.Char(36)
+  student_id String
+  subject_id String
+  score      Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  student    students @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subject    subject  @relation(fields: [subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([student_id, subject_id])
 }

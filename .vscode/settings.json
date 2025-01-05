@@ -3,5 +3,16 @@
   "jest.runMode": "on-demand",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "prisma.languageServer.enabled": true
+  "eslint.format.enable": true,
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
 }

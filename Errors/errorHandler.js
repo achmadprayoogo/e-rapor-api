@@ -1,29 +1,25 @@
-export default function errorHandler(error, req, res, next) {
-  const requestInfo = {
-    method: req.method,
-    body: req.body,
-    url: req.url,
-    ip: req.ip,
-    baseUrl: req.baseUrl,
-    headers: req.headers,
-  };
+export default function errorHandler(err, res, req, next) {
+  console.log("Error caught:", err); // untuk debugging
 
-  console.log("Request Info: ", requestInfo);
-  console.error("error handler: ", error);
+  // Handle express-joi-validation errors
+  if (err && err.error && err.error.isJoi) {
+    return res.status(409).json({
+      status: "error",
+      message: err.error.details.map((detail) => detail.message).join(", "),
+    });
+  }
 
-  const statusCode = error.error ? 422 : statusCode || 500;
-  const errors = error.error
-    ? [error.error]
-    : [
-        {
-          status: statusCode,
-          title: error.name || "Internal Server Error",
-          detail: error.message,
-        },
-      ];
+  // Handle ActionError
+  if (err instanceof Error) {
+    return res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
+  }
 
-  res.status(statusCode).json({
-    jsonapi: { version: "1.1" },
-    errors,
+  // Default error
+  return res.status(500).json({
+    status: "error",
+    message: "Internal Server Error",
   });
 }
